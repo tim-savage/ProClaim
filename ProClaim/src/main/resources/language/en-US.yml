@@ -1,0 +1,985 @@
+#####################
+# Tool Names and Lore
+#####################
+
+tool-name-basic: '&6ProClaim Tool'
+tool-lore-basic:
+  - '&eUsed to create'
+  - '&eand modify claims'
+
+tool-name-admin: '&6ProClaim Admin Tool'
+tool-lore-admin:
+  - '&eUsed to create'
+  - '&eand modify admin claims'
+
+tool-name-subclaim: '&6ProClaim Subclaim Tool'
+tool-lore-subclaim:
+  - '&eUsed to subdivide'
+  - '&eexisting claims'
+
+tool-name-resize: '&6ProClaim Resize Tool'
+tool-lore-resize:
+  - '&eUsed to resize'
+  - '&eexisting claims'
+
+tool-name-delete: '&6ProClaim Delete Tool'
+tool-lore-delete:
+  - '&eUsed to delete'
+  - '&eexisting claims'
+
+
+# Owner name for administrative claims
+admin-name: 'an administrator'
+
+# Custom Messages
+#
+# Variable substitutions:
+# %PLAYER_NAME%          Player name the message is being sent to
+# %OWNER_NAME%			Claim owner name
+# %WORLD_NAME%           Player world name
+
+
+# repeat-delay is the number of seconds to wait before
+# displaying a message again (only used on appropriate messages)
+
+messages:
+  CLAIM_FAIL_WORLD_NOT_ENABLED:
+    enabled: true
+    text: '&3[ProClaim]&c Claims are not enabled in this world.'
+    repeat-delay: 5
+
+  COMMAND_FAIL_ARGS_COUNT_UNDER:
+    enabled: true
+    text: '&3[ProClaim]&c Too few arguments!'
+
+  COMMAND_FAIL_ARGS_COUNT_OVER:
+    enabled: true
+    text: '&3[ProClaim]&c Too many arguments!'
+
+  COMMAND_FAIL_CONSOLE:
+    enabled: true
+    text: '&3[ProClaim]&c You must be in game to use this command!'
+
+  COMMAND_FAIL_INVALID:
+    enabled: true
+    text: '&3[ProClaim]&c That is not a valid command!'
+
+  COMMAND_FAIL_SET_INVALID_INTEGER:
+    enabled: true
+    text: '&3[ProClaim]&c Value must be an integer!'
+
+  COMMAND_FAIL_NO_CLAIM_RECORD:
+    enabled: true
+    text: '&3[ProClaim]&c That is not an existing claim!'
+
+  COMMAND_FAIL_PLAYER_NOT_FOUND:
+    enabled: true
+    text: '&3[ProClaim]&c That player could not be found!'
+    
+  COMMAND_FAIL_PLAYER_NOT_ONLINE:
+    enabled: true
+    text: '&3[ProClaim]&c That player is not online!'
+
+  PLAYER_INFO_BLOCKS_TOTAL:
+    enabled: true
+    text: '&3[ProClaim]&b You have &3%PLAYER_BLOCKS%&b total claim blocks.'
+
+
+#############################
+# Claim Tool Command Messages
+#############################
+  COMMAND_SUCCESS_CLAIMTOOL:
+    enabled: true
+    text: '&3[ProClaim]&b Claim tool successfully placed in inventory.'
+
+  COMMAND_FAIL_CLAIMTOOL_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to create a ProClaim tool!'
+
+  COMMAND_FAIL_CLAIMTOOL_INVENTORY_FULL:
+    enabled: true
+    text: '&3[ProClaim]&c Cannot give tool because player inventory is full!'
+
+  COMMAND_FAIL_CLAIMTOOL_INVENTORY_TOOL_EXISTS:
+    enabled: true
+    text: '&3[ProClaim]&c Only one claim tool is allowed in a player inventory!'
+
+
+#############################
+# AdminClaim Command Messages
+#############################
+  COMMAND_SUCCESS_ADMIN_TOOL_EQUIPPED:
+    enabled: true
+    text: '&3[ProClaim]&b Admin Claim Tool equipped.'
+
+  COMMAND_FAIL_ADMINCLAIM_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission for admin claims.'
+
+
+###########################
+# Subclaim Command Messages
+###########################
+  COMMAND_SUCCESS_SUBCLAIM_TOOL_EQUIPPED:
+    enabled: true
+    text: '&3[ProClaim]&b Subclaim Tool equipped.'
+
+  COMMAND_FAIL_SUBCLAIM_PERMISSION:
+     enabled: true
+     text: '&3[ProClaim]&c &cYou do not have permission to create subclaims!'
+
+
+##############################
+# DeleteClaim Command Messages
+##############################
+  COMMAND_SUCCESS_DELETE_TOOL_EQUIPPED:
+    enabled: true
+    text: '&3[ProClaim]&b Delete Claim Tool equipped.'
+
+  COMMAND_FAIL_DELETECLAIM_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to use the delete tool.'
+
+
+#######################
+# Help Command Messages
+#######################
+  COMMAND_FAIL_HELP_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c &cYou do not have permission to view ProClaim help!'
+
+
+################################
+# TransferClaim Command Messages
+################################
+  COMMAND_SUCCESS_TRANSFERCLAIM:
+    enabled: true
+    text: '&3[ProClaim]&b Claim ownership has been successfully transfered to %OWNER_NAME%.'
+
+  COMMAND_FAIL_TRANSFERCLAIM_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to transfer claim ownership!'
+
+  COMMAND_FAIL_TRANSFERCLAIM_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim at your current location!'
+
+  COMMAND_FAIL_TRANSFERCLAIM_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You can not transfer this claim, it belongs to %OWNER_NAME%!'
+
+  COMMAND_FAIL_TRANSFERCLAIM_SUBCLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c You can not transfer ownership of subclaims.'
+
+
+###############################
+# AbandonClaim Command Messages
+###############################
+  COMMAND_SUCCESS_ABANDONCLAIM:
+    enabled: true
+    text: '&3[ProClaim]&b Claim has been successfully abandoned.'
+  
+  COMMAND_FAIL_ABANDONCLAIM_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to abandon claims!'
+
+  COMMAND_FAIL_ABANDONCLAIM_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim at your current location!'
+
+  COMMAND_FAIL_ABANDONCLAIM_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You can not abandon this claim, it belongs to %OWNER_NAME%!'
+
+  COMMAND_FAIL_ABANDONCLAIM_SUBCLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c You can not abandon a subclaim!'
+
+
+########################
+# Trust Command Messages
+########################
+  COMMAND_SUCCESS_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&b Build trust granted.'
+
+  COMMAND_SUCCESS_CONTAINER_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&b Container trust granted.'
+
+  COMMAND_SUCCESS_ACCESS_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&b Access trust granted.'
+
+  COMMAND_SUCCESS_GRANT_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&b Permission trust granted.'
+
+  COMMAND_SUCCESS_UNTRUST:
+    enabled: true
+    text: '&3[ProClaim]&b Trust removed.'
+
+  COMMAND_FAIL_TRUST_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission for the trust command!'
+
+  COMMAND_FAIL_TRUST_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim at your current location! Stand inside a claim to assign permissions.'
+
+  COMMAND_FAIL_TRUST_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You can not assign permissions for this claim, it belongs to %OWNER_NAME%!'
+
+  COMMAND_FAIL_GRANT_ACCESS_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to grant access trust for this claim!'
+
+  COMMAND_FAIL_GRANT_CONTAINER_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to grant container trust for this claim!'
+
+  COMMAND_FAIL_GRANT_BUILD_TRUST:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to grant build trust for this claim!'
+
+############################
+# TrustList Command Messages
+############################
+  COMMAND_FAIL_TRUSTLIST_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission for the trustlist command!'
+
+  COMMAND_FAIL_TRUSTLIST_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim at your current location! Stand inside a claim to view permissions.'
+
+  COMMAND_FAIL_TRUSTLIST_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You can not view permissions for this claim, it belongs to %OWNER_NAME%!'
+
+
+#############################
+# ClaimGroup Command Messages
+#############################
+  COMMAND_SUCCESS_CLAIMGROUP_CREATE:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group has been successfully created.'
+
+  COMMAND_SUCCESS_CLAIMGROUP_RENAME:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group has been successfully renamed.'
+    
+  COMMAND_SUCCESS_CLAIMGROUP_SETLIMIT:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group limit has been successfully updated.'
+    
+  COMMAND_SUCCESS_CLAIMGROUP_SET:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group has been successfully set for claim.'
+
+  COMMAND_SUCCESS_CLAIMGROUP_UNSET:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group has been successfully removed for claim.'
+
+  COMMAND_FAIL_CLAIMGROUP_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to manage claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_CREATE_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to create claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_CREATE_EXISTING:
+    enabled: true
+    text: '&3[ProClaim]&c A claim group with that name already exists!'
+
+  COMMAND_FAIL_CLAIMGROUP_DELETE_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to delete claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_RENAME_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to rename claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_SET_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to set claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_UNSET_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to remove claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_SET_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim at your current location!'
+
+  COMMAND_FAIL_CLAIMGROUP_SET_NO_CLAIM_GROUP:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim group with that name!'
+
+  COMMAND_FAIL_CLAIMGROUP_SETLIMIT_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to set claim group limits!'
+
+  COMMAND_FAIL_CLAIMGROUP_LIST_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to list claim groups!'
+
+  COMMAND_FAIL_CLAIMGROUP_INVALID_SUBCOMMAND:
+    enabled: true
+    text: '&3[ProClaim]&c That is not a valid subcommand!'
+
+  COMMAND_FAIL_CLAIMGROUP_NAME_TOO_LONG:
+    enabled: true
+    text: '&3[ProClaim]&c Claim group names are limited to 15 characters or less!'
+
+  COMMAND_FAIL_CLAIMGROUP_INVALID_INTEGER:
+    enabled: true
+    text: '&3[ProClaim]&c Claim group limit must be an integer!'
+
+  COMMAND_INFO_CLAIMGROUP_LIST_HEADING:
+    enabled: true
+    text: '&3[ProClaim]&b Claim group names and claim limits:'
+
+
+##############################
+# ClaimBlocks Command Messages
+##############################
+  COMMAND_FAIL_CLAIMBLOCKS_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission for the claimblock command!'
+
+  COMMAND_FAIL_CLAIMBLOCKS_GIVE_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to give claim blocks!'
+
+  COMMAND_SUCCESS_CLAIMBLOCKS_SELF_TOTAL:
+    enabled: true
+    text: '&3[ProClaim]&b You have &3%PLAYER_BLOCKS%&b total claim blocks.'
+
+  COMMAND_SUCCESS_CLAIMBLOCKS_OTHER_TOTAL:
+    enabled: true
+    text: '&3[ProClaim]&b %TARGET_PLAYER_NAME% has &3%TARGET_PLAYER_BLOCKS%&b total claim blocks.'
+
+  COMMAND_SUCCESS_CLAIMBLOCKS_GIVE:
+    enabled: true
+    text: |
+      &3[ProClaim]&b You successfully gave %TARGET_PLAYER_NAME% additional claim blocks.
+      %TARGET_PLAYER_NAME% now has &3%TARGET_PLAYER_BLOCKS%&b total claim blocks.
+
+
+#########################
+# Reload Command Messages
+#########################
+  COMMAND_SUCCESS_RELOAD:
+    enabled: true
+    text: '&3[ProClaim]&b configuration reloaded.'
+
+  COMMAND_FAIL_RELOAD_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to reload the configuration!'
+
+
+#########################
+# Delete Command Messages
+#########################
+  COMMAND_SUCCESS_CLAIM_DELETE:
+    enabled: true
+    text: '&3[ProClaim]&b Claim successfully deleted!'
+
+  COMMAND_FAIL_CLAIM_DELETE:
+    enabled: true
+    text: '&3[ProClaim]&c &cYou do not have permission to delete this claim!'
+
+  COMMAND_FAIL_SETGROUP_PERMISSION:
+     enabled: true
+     text: '&3[ProClaim]&c &cYou do not have permission to set claim groups!'
+
+  COMMAND_FAIL_LIST_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c &cYou do not have permission to list claims!'
+
+
+#######################
+# Generic Tool Messages
+#######################
+  TOOL_FAIL_DISTANCE_EXCEEDED:
+  tool-use-too-far:
+    enabled: true
+    text: '&3[ProClaim]&c That block is too far away.'
+    repeat-delay: 1
+
+  TOOL_FAIL_WORLD_DISABLED:
+    enabled: true
+    text: '&3[ProClaim]&c Claims are not enabled in this world.'
+
+  TOOL_FAIL_NO_TOOL_IN_INVENTORY:
+    enabled: true
+    text: '&3[ProClaim]&c No claim tool found in inventory.'
+
+
+#####################
+# Basic Tool Messages
+#####################
+  TOOL_SUCCESS_BASIC_START:
+    enabled: true
+    text: '&3[ProClaim]&b First corner selected. Click with tool again at opposite corner to create a new claim.'
+
+  TOOL_SUCCESS_BASIC_FINISH:
+    enabled: true
+    text: '&3[ProClaim]&b Claim successfully created!.'
+
+  TOOL_FAIL_BASIC_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to create claims.'
+
+  TOOL_FAIL_BASIC_NARROW:
+    enabled: true
+    text: '&3[ProClaim]&c Your claim is too narrow.'
+
+  TOOL_FAIL_BASIC_TOO_SMALL:
+    enabled: true
+    text: '&3[ProClaim]&c Your claim is too small.'
+
+  TOOL_FAIL_BASIC_LIMIT:
+    enabled: true
+    text: '&3[ProClaim]&c You cannot exceed the claim count limit.'
+
+  TOOL_FAIL_BASIC_INSUFFICIENT_BLOCKS:
+    enabled: true
+    text: |
+      &3[ProClaim]&c You do not have enough claim blocks to create a claim of this size.
+      &bYou have &3%PLAYER_BLOCKS%&b claim blocks available.
+
+  TOOL_FAIL_BASIC_BLOCKS_EXCEEDED:
+    enabled: true
+    text: |
+      &3[ProClaim]&c You do not have enough claim blocks to create a claim of this size.
+      &bYou have &3%PLAYER_BLOCKS%&b claim blocks available.
+
+  TOOL_FAIL_BASIC_OVERLAP:
+    enabled: true
+    text: '&3[ProClaim]&c Your selected area overlaps an existing claim.'
+
+  TOOL_FAIL_BASIC_WORLDGUARD:
+    enabled: true
+    text: '&3[ProClaim]&c Your selected area overlaps a region where you do not have build permission.'
+
+  TOOL_FAIL_BASIC_CLAIM_CANCELLED:
+    enabled: true
+    text: '&3[ProClaim]&c Claim creation cancelled.'
+
+
+#####################
+# Admin Tool Messages 
+#####################
+  TOOL_SUCCESS_ADMIN_START:
+    enabled: true
+    text: '&3[ProClaim]&b First corner selected. Click with tool again at opposite corner to create a new admin claim.'
+
+  TOOL_SUCCESS_ADMIN_FINISH:
+    enabled: true
+    text: '&3[ProClaim]&b Admin claim successfully created!.'
+
+  TOOL_FAIL_ADMIN_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to create admin claims.'
+
+  TOOL_FAIL_ADMIN_OVERLAP:
+    enabled: true
+    text: '&3[ProClaim]&c A claim already exists at that location.'
+
+  TOOL_FAIL_ADMIN_CLAIM_CANCELLED:
+    enabled: true
+    text: '&3[ProClaim]&c Admin claim creation cancelled.'
+
+
+######################
+# Resize Tool Messages
+######################
+  TOOL_SUCCESS_RESIZE_START:
+    enabled: true
+    text: '&3[ProClaim]&b Resizing claim. Click with tool again at the new location for this corner.'
+
+  TOOL_SUCCESS_RESIZE_FINISH:
+    enabled: true
+    text: '&3[ProClaim]&b Claim successfully resized!.'
+
+  TOOL_FAIL_RESIZE_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to resize this claim.'
+
+  TOOL_FAIL_RESIZE_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c Only %OWNER_NAME% can resize this claim.'
+
+  TOOL_FAIL_RESIZE_CLAIM_NOT_RESIZEABLE:
+    enabled: true
+    text: '&3[ProClaim]&c This claim is not resizeable.'
+
+  TOOL_FAIL_RESIZE_ADMIN_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to resize admin claims.'
+
+  TOOL_FAIL_RESIZE_OVERLAP:
+    enabled: true
+    text: '&3[ProClaim]&c Resized claim would overlap another claim.'
+
+  TOOL_FAIL_RESIZE_TOO_SMALL:
+    enabled: true
+    text: '&3[ProClaim]&c Resized claim is tool small.'
+
+  TOOL_FAIL_RESIZE_SMALL:
+    enabled: true
+    text: '&3[ProClaim]&c Claim is too small.'
+
+  TOOL_FAIL_RESIZE_SUBCLAIM_OUTSIDE_PARENT:
+    enabled: true
+    text: '&3[ProClaim]&c Resized subclaim would extend beyond its parent claim borders.'
+
+  TOOL_FAIL_RESIZE_PARENT_INSIDE_SUBCLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c Resized claim would not keep all of its subclaims within its borders.'
+
+  TOOL_FAIL_RESIZE_OVERLAP_SELF:
+    enabled: true
+    text: '&3[ProClaim]&c Resized corner can not extend beyond opposite border.'
+
+  TOOL_FAIL_RESIZE_CLAIM_INACTIVE:
+    enabled: true
+    text: '&3[ProClaim]&c Resized claim no longer exists.'
+
+  TOOL_FAIL_RESIZE_CLAIM_CANCELLED:
+    enabled: true
+    text: '&3[ProClaim]&c Claim resizing cancelled.'
+
+  TOOL_FAIL_RESIZE_INSUFFICIENT_BLOCKS:
+    enabled: true
+    text: |
+      &3[ProClaim]&c You do not have enough claim blocks for the resized claim.
+      &bYou have &3%PLAYER_BLOCKS%&b claim blocks available.
+
+  TOOL_FAIL_RESIZE_WORLDGUARD:
+    enabled: true
+    text: '&3[ProClaim]&c Your selected area overlaps a region where you do not have build permission.'
+
+
+########################
+# Subclaim Tool Messages
+########################
+  TOOL_SUCCESS_SUBCLAIM_START:
+    enabled: true
+    text: '&3[ProClaim]&b First corner selected. Click with tool again at opposite corner to create a new subclaim.'
+
+  TOOL_SUCCESS_SUBCLAIM_FINISH:
+    enabled: true
+    text: '&3[ProClaim]&b Subclaim successfully created!.'
+
+  TOOL_FAIL_SUBCLAIM_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to subdivide claims.'
+
+  TOOL_FAIL_SUBCLAIM_NO_PARENT:
+    enabled: true
+    text: '&3[ProClaim]&c Subclaims can only be created inside existing claims.'
+
+  TOOL_FAIL_SUBCLAIM_OUTSIDE_PARENT:
+    enabled: true
+    text: '&3[ProClaim]&c Subclaims must be within the boundaries of their parent claim.'
+
+  TOOL_FAIL_SUBCLAIM_OVERLAP:
+    enabled: true
+    text: '&3[ProClaim]&c Subclaim would overlap another subclaim.'
+
+  TOOL_FAIL_SUBCLAIM_CANCELLED:
+    enabled: true
+    text: '&3[ProClaim]&c Subclaim creation cancelled.'
+
+
+######################
+# Delete Tool Messages
+######################
+  TOOL_SUCCESS_DELETE_START:
+    enabled: true
+    text: '&3[ProClaim]&b Claim selected for deletion. Click inside claim again to confirm delete.'
+    
+  TOOL_SUCCESS_DELETE_FINISH:
+    enabled: true
+    text: '&3[ProClaim]&b Claim successfully deleted!'
+
+  TOOL_FAIL_DELETE_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have the required permission to delete claims.'
+  
+  TOOL_FAIL_DELETE_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c There is no claim to delete at that location.'
+
+  TOOL_FAIL_DELETE_NOT_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You can not delete that claim, it belongs to %OWNER_NAME%.'
+
+  TOOL_FAIL_DELETE_CONFIRM:
+    enabled: true
+    text: '&3[ProClaim]&c Confirmation click is not within selected claim. Claim deletion aborted.'
+
+  TOOL_INFO_DELETE_EQUIP:
+    enabled: true
+    text: '&3[ProClaim]&b Click on a claim or subclaim you would like to delete.'
+
+  TOOL_FAIL_DELETE_CLAIM_CANCELLED:
+    enabled: true
+    text: '&3[ProClaim]&c Claim deletion cancelled.'
+
+
+#######################
+# Inspect tool messages
+#######################
+  TOOL_FAIL_INSPECT_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&b No claim exists at that location.'
+
+  TOOL_SUCCESS_INSPECT:
+    enabled: true
+    text: |
+      &8===================== &3[ProClaim] &8=====================
+      &aClaim:&r %CLAIM_KEY%
+      &aOwner:&r %OWNER_NAME%
+      &aClaim Group:&r %CLAIM_GROUP%
+      &aSize:&r %CLAIM_LENGTH% x %CLAIM_WIDTH% = %CLAIM_AREA%
+      &aLocked:&r %CLAIM_LOCKED%
+      &aResizeable:&r %CLAIM_RESIZEABLE%
+      &aCreated:&r %CLAIM_CREATED%
+
+
+#################################
+# Player action response messages
+#################################
+  ACTION_DENY_BUILD_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to build here.'
+    repeat-delay: 5
+
+  ACTION_DENY_DAMAGE_ENTITY:
+    enabled: true
+    text: '&3[ProClaim]&c That belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_PLACE_GENERIC:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to place that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_PLACE_HANGING_GENERIC:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to hang that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_PLACE_PAINTING:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to hang that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_PLACE_ITEM_FRAME:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to hang that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_PLACE_LEASH_HITCH:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to hitch that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_BREAK_GENERIC:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to break that.'
+    repeat-delay: 5
+
+  ACTION_DENY_BREAK_HANGING_GENERIC:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to remove that.'
+    repeat-delay: 5
+
+  ACTION_DENY_BREAK_PAINTING:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to remove that painting.'
+    repeat-delay: 5
+
+  ACTION_DENY_BREAK_ITEM_FRAME:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to remove that item frame.'
+    repeat-delay: 5
+
+  ACTION_DENY_BREAK_LEASH_HITCH:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to break that hitch.'
+    repeat-delay: 5
+
+  ACTION_DENY_IGNITE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to light that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_EMPTY_BUCKET:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to empty that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_FILL_BUCKET:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to fill that here.'
+    repeat-delay: 5
+
+  ACTION_DENY_INTERACT_ARMOR_STAND:
+    enabled: true
+    text: '&3[ProClaim]&c That armor stand belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_INTERACT_ITEM_FRAME:
+    enabled: true
+    text: '&3[ProClaim]&c That item frame belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_INTERACT_LEASH:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to untie that hitch.'
+    repeat-delay: 5
+  
+  ACTION_DENY_INTERACT_PAINTING:
+    enabled: true
+    text: '&3[ProClaim]&c That painting belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_INTERACT_HORSE:
+    enabled: true
+    text: '&3[ProClaim]&c That horse belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+  
+  ACTION_DENY_INTERACT_ENTITY:
+    enabled: true
+    text: '&3[ProClaim]&c That belongs to %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_ENTER_BED:
+    enabled: true
+    text: '&3[ProClaim]&c You cannot sleep in that bed without permission from %OWNER_NAME%.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_CHEST:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to open this chest.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_FURNACE:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to access this furnace.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_WORKBENCH:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to use this crafting table.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DISPENSER:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to access this dispenser.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_HOPPER:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to access this hopper.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DROPPER:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to access this dropper.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_BREWING_STAND:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to use this brewing stand.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_CAULDRON:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to use this cauldron.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_ANVIL:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to use this anvil.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_BEACON:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to use this beacon.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_JUKEBOX:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to play this jukebox.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_CAKE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to eat this cake.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_BUTTON:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to activate this button.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_LEVER:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to activate this lever.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_NOTE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to play this note block.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DIODE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to adjust this diode.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DIODE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to adjust this repeater.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DIODE_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to adjust this repeater.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_COMPARATOR_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to adjust this comparator.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_DAYLIGHT_DETECTOR_BLOCK:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to adjust this daylight sensor.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_WOODEN_DOOR:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to open this door.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_FENCE_GATE:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to open this gate.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_TRAP_DOOR:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to open this trap door.'
+    repeat-delay: 5
+
+  ACTION_DENY_ACCESS_PLATE:
+    enabled: true
+    text: '&3[ProClaim]&c You need permission from %OWNER_NAME% to activate this plate.'
+    repeat-delay: 5
+
+  ACTION_DENY_PICKUP_TOOL:
+    enabled: true
+    text: '&3[ProClaim]&c Only one claim tool is allowed in a player inventory!'
+    repeat-delay: 15
+
+###############
+# Sign Messages
+###############
+
+  SIGN_FAIL_SELL_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to sell claims!'
+
+  SIGN_FAIL_SELL_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c This sign is not within a claim!'
+  
+  SIGN_FAIL_SELL_NOT_CLAIM_OWNER:  
+    enabled: true
+    text: '&3[ProClaim]&c You cannot sell a claim you do not own!'
+
+  SIGN_FAIL_SELL_NO_PRICE:
+    enabled: true
+    text: '&3[ProClaim]&c You need to specifiy a price for you claim on the second line!'
+
+  SIGN_FAIL_SELL_INVALID_PRICE:
+    enabled: true
+    text: '&3[ProClaim]&c That is not a valid price!'
+
+  SIGN_FAIL_SELL_NO_ECONOMY:
+    enabled: true
+    text: '&3[ProClaim]&c No economy plugin is registered. Selling claims is disabled.'
+
+  SIGN_FAIL_BUY_NO_ECONOMY:
+    enabled: true
+    text: '&3[ProClaim]&c No economy plugin is registered. Buying claims is disabled.'
+
+  SIGN_FAIL_BUY_PERMISSION:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have permission to buy claims!'
+
+  SIGN_FAIL_BUY_NO_CLAIM:
+    enabled: true
+    text: '&3[ProClaim]&c This sign is not within a claim!'
+
+  SIGN_FAIL_BUY_PLAYER_IS_OWNER:
+    enabled: true
+    text: '&3[ProClaim]&c You already own this claim!'
+
+  SIGN_FAIL_BUY_OWNER_MISMATCH:
+    enabled: true
+    text: '&3[ProClaim]&c The owner listed on the sign is not the true owner of the claim!'
+
+  SIGN_FAIL_BUY_TOP_LEVEL_NO_LEASE:
+    enabled: true
+    text: '&3[ProClaim]&c Top level claims can not be leased, only sold!'
+
+  SIGN_FAIL_BUY_INVALID_PRICE:
+    enabled: true
+    text: '&3[ProClaim]&c The price listed is not a valid number!'
+
+  SIGN_FAIL_BUY_INSUFFICIENT_FUNDS:
+    enabled: true
+    text: '&3[ProClaim]&c You do not have sufficient funds in your account!'
+
+  SIGN_FAIL_BUY_CLAIM_GROUP_LIMIT_EXCEEDED:
+    enabled: true
+    text: '&3[ProClaim]&c You have already reached the limit for claims in %CLAIM_GROUP%!'
+
+  SIGN_SUCCESS_BUY:
+    enabled: true
+    text: '&3[ProClaim]&b Congratulations! You now own this claim.'
+
+  SIGN_SUCCESS_LEASE:
+    enabled: true
+    text: '&3[ProClaim]&b Congratulations! You now lease this subclaim.'
+
+
+  list-header:
+    enabled: true
+    text: '&3Page &b%page%&3 of &b%pagecount%'
+  list-footer:
+    enabled: false
+    text: '&3Page &b%page%&3 of &b%pagecount%'
+  list-item:
+    enabled: true
+    text: '&a%DISPLAYNAME%'
+  list-item-disabled:
+    enabled: true
+    text: '&8%DISPLAYNAME% &r[ DISABLED ]'
+  list-item-undiscovered:
+    enabled: true
+    text: '&c%DISPLAYNAME% &r[ UNDISCOVERED ]'
+  list-empty:
+    enabled: true
+    text: '&bThere are no claims to list!'

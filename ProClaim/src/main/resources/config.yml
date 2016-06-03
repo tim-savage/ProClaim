@@ -1,0 +1,62 @@
+# This is the config file for ${project.name} v${project.version}
+debug: true
+# localized language support
+language: en-US
+
+# Note: use only one enabled/disabled list, and comment out or remove the other
+# enabled worlds list (use this list for a default-deny world policy)
+
+#enabled-worlds:
+#  - enabled_world1
+#  - enabled_world2
+
+# disabled worlds list (use this list for a default-allow world policy)
+
+disabled-worlds:
+  - disabled_world1
+  - disabled_world2
+
+# tool materials
+tool-material-basic: GOLD_SPADE
+tool-material-admin: DIAMOND_SPADE
+tool-material-subclaim: IRON_SPADE
+tool-material-resize: WOOD_SPADE
+tool-material-delete: SHEARS
+
+# allow only one tool in a players inventory
+one-tool-inventory: true
+
+# destroy tool on drop
+destroy-on-drop: true
+
+# require permission node to create claims
+require-permission-create: true
+
+# allow admins to override WorldGuard
+admin-overrides-worldguard: false
+
+# maximum number of claims a player is allowed (zero for no limit)
+max-claims: 0
+
+# distance claims automatically extend down on creation
+claim-auto-depth: 5
+
+# automatically expire claims if claim owner has not logged on for specified number of days
+claim-auto-expire: false
+
+# number of days passed without owner login before claims auto expire
+claim-expire-days: 90
+
+# player starting earned blocks
+initial-blocks: 100
+
+# player earned blocks per hour
+blocks-per-hour: 100
+
+# minimum claim size
+min-width: 10
+min-length: 10
+min-area: 100
+
+# Claim group default claim limit
+claimgroup-default-limit: 1

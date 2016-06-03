@@ -1,0 +1,315 @@
+name: ${project.name}
+main: com.winterhaven_mc.proclaim.PluginMain
+author: ${project.author}
+version: ${project.version}
+softdepend: [Multiverse-Core,Vault,WorldGuard]
+
+commands:
+  ClaimTool:
+    description: Places a ProClaim tool in player's inventory.
+    aliases: pctool
+    usage: /claimtool
+    permission: proclaim.command.claimtool
+    permission-message: You need to have permission node <permission> to use this command.
+
+  Trust:
+    description: Give another player build permission in a claim.
+    aliases: buildtrust
+    usage: /trust <player>
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  AccessTrust:
+    description: Give another player access permission in a claim.
+    usage: /accesstrust <player>
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  ContainerTrust:
+    description: Give another player container permission in a claim.
+    usage: /containertrust <player>
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  PermissionTrust:
+    description: Give another player grant permission in a claim.
+    usage: /permissiontrust <player>
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  Untrust:
+    description: Remove permission for another player in a claim.
+    usage: /untrust <player>
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  TrustList:
+    description: Display all permissions in a claim.
+    usage: /trustlist
+    permission: proclaim.command.trust
+    permission-message: You need to have permission node <permission> to use this command.
+
+  AbandonClaim:
+    description: Abandons ownership of a claim.
+    usage: /abandonclaim
+    permission: proclaim.command.abandonclaim
+    permission-message: You need to have permission node <permission> to use this command.
+
+  TransferClaim:
+    description: Transfers claim ownership to another player.
+    usage: /transferclaim <player>
+    permission: proclaim.command.transferclaim
+    permission-message: You need to have permission node <permission> to use this command.
+
+  SubClaim:
+    description: Switches ProClaim tool to subclaims mode.
+    aliases: [subclaims, subdivide, subdivideclaim, subdivideclaims, subclaimtool]
+    usage: /subclaim
+    permission: proclaim.command.subclaim
+    permission-message: You need to have permission node <permission> to use this command.
+
+  DeleteClaim:
+    description: Switches ProClaim tool to delete claims mode.
+    aliases: [deleteclaims, deleteclaimtool, deletetool]
+    usage: /deleteclaim
+    permission: proclaim.command.deleteclaim
+    permission-message: You need to have permission node <permission> to use this command.
+
+  ProClaim:
+    description: ProClaim administrator command.
+    aliases: pc
+    usage: /proclaim [subcommand]
+    permission: proclaim.admin
+    permission-message: You need to have permission node <permission> to use this command.
+
+  PcAdmin:
+    description: ProClaim administrator command.
+    aliases: [adminclaim, adminclaims, adminclaimtool, admintool]
+    usage: /pcadmin
+    permission: proclaim.command.admin
+    permission-message: You need to have permission node <permission> to use this command.
+
+  PcStatus:
+    description: Displays plugin status.
+    usage: /pcstatus
+    permission: proclaim.command.status
+    permission-message: You need to have permission node <permission> to use this command.
+  
+  ClaimBlocks:
+    description: Displays player claim blocks available.
+    aliases: claimblock
+    usage: /claimblocks
+    permission: proclaim.command.claimblocks
+    permission-message: You need to have permission node <permission> to use this command.
+  
+  ClaimGroup:
+    description: Manages claim groups.
+    aliases: claimgroups
+    usage: |
+       /claimgroup set <groupname>
+       /claimgroup unset
+       /claimgroup create <groupname> [limit]
+       /claimgroup delete <groupname>
+       /claimgroup rename <oldname> <newname>
+       /claimgroup setlimit <groupname> [newlimit]
+       /claimgroup list
+    permission: proclaim.command.claimgroup
+    permission-message: You need to have permission node <permission> to use this command.
+
+
+permissions:
+  proclaim.claims.create:
+    description: Allows creation of claims.
+    default: true
+
+  proclaim.claims.delete:
+    description: Allows deleting claims.
+    default: op
+
+  proclaim.claims.resize:
+    description: Allows resizing of claims.
+    default: true
+
+  proclaim.claims.subclaim:
+    description: Allows subdividing claims.
+    default: true
+
+  proclaim.claims.buy:
+    description: Allows buying claims.
+    default: true
+
+  proclaim.claims.sell:
+    description: Allows selling claims.
+    default: true
+
+  proclaim.claims.*:
+    description: Gives all user claim permissions.
+    default: op
+    children:
+      proclaim.claims.create: true
+      proclaim.claims.resize: true
+      proclaim.claims.delete: true
+      proclaim.claims.subclaim: true
+      proclaim.claims.buy: true
+      proclaim.claims.sell: true
+
+
+  proclaim.claims.admin.create:
+    description: Allows creation of admin claims.
+    default: op
+
+  proclaim.claims.admin.delete:
+    description: Allows deleting admin claims.
+    default: op
+
+  proclaim.claims.admin.resize:
+    description: Allows resizing of admin claims.
+    default: op
+
+  proclaim.claims.admin.subclaim:
+    description: Allows subdividing admin claims.
+    default: op
+
+  proclaim.claims.admin.*:
+    description: Gives all admin claim permissions.
+    default: op
+    children:
+      proclaim.claims.admin.create: true
+      proclaim.claims.admin.delete: true
+      proclaim.claims.admin.resize: true
+      proclaim.claims.admin.subclaim: true
+
+
+  proclaim.command.help:
+    description: Allows display of config settings.
+    default: true
+
+  proclaim.command.subclaim:
+    description: Allows the use of the SubClaimTool command.
+    default: true
+
+  proclaim.command.claimtool:
+    description: Allows use of command to give a ProClaim tool.
+    default: true
+
+  proclaim.command.abandonclaim:
+    description: Allows the use of the abandonclaim command.
+    default: true
+
+  proclaim.command.transferclaim:
+    description: Allows the use of the transferclaim command.
+    default: true
+
+  proclaim.command.trust:
+    description: Allows the use of the trust command.
+    default: true
+
+  proclaim.command.admin:
+    description: Allows use of the ProClaim Admin command.
+    default: op
+
+  proclaim.command.deleteclaim:
+    description: Allows the use of the DeleteClaimTool command.
+    default: op
+
+  proclaim.command.reload:
+    description: Allows reloading config settings.
+    default: op
+
+  proclaim.command.showcache:
+    description: Display player cache statistics.
+    default: op
+
+  proclaim.command.status:
+    description: Allows display of plugin config settings.
+    default: op
+
+  proclaim.command.claimblocks:
+    description: Allows command to display player claim blocks available.
+    default: true
+
+  proclaim.command.claimblocks.show:
+    description: Allows command to display player claim blocks available.
+    default: true
+
+  proclaim.command.claimblocks.give:
+    description: Allows giving claim blocks to players.
+    default: op
+
+  proclaim.command.claimblocks.*:
+    description: Gives all claimblocks permissions.
+    default: op
+    children:
+      proclaim.command.claimblocks.show: true
+      proclaim.command.claimblocks.give: true
+
+  proclaim.command.*:
+    description: Gives all command permissions.
+    default: op
+    children:
+      proclaim.command.claimgroup: true
+      proclaim.command.claimtool: true
+      proclaim.command.admin: true
+      proclaim.command.subclaim: true
+      proclaim.command.deleteclaim: true
+      proclaim.command.help: true
+      proclaim.command.reload: true
+      proclaim.command.showcache: true
+      proclaim.command.status: true
+      proclaim.command.abandonclaim: true
+      proclaim.command.transferclaim: true
+      proclaim.command.trust: true
+      proclaim.command.claimblocks.*: true
+      proclaim.command.claimgroup.*: true
+
+
+  proclaim.command.claimgroup:
+    description: Allows use of command to manage claim groups.
+    default: op
+
+  proclaim.command.claimgroup.create:
+    description: Allows use of command to create claim groups.
+    default: op
+
+  proclaim.command.claimgroup.delete:
+    description: Allows use of command to delete claim groups.
+    default: op
+
+  proclaim.command.claimgroup.rename:
+    description: Allows use of command to rename claim groups.
+    default: op
+
+  proclaim.command.claimgroup.setlimit:
+    description: Allows use of command to set claim group limits.
+    default: op
+
+  proclaim.command.claimgroup.list:
+    description: Allows use of command to list claim groups.
+    default: op
+
+  proclaim.command.claimgroup.set:
+    description: Allows use of command to set the claim group for a claim.
+    default: op
+
+  proclaim.command.claimgroup.*:
+    description: Gives all claim group subcommand permissions.
+    default: op
+    children:
+      proclaim.command.claimgroup: true
+      proclaim.command.claimgroup.set: true
+      proclaim.command.claimgroup.unset: true
+      proclaim.command.claimgroup.create: true
+      proclaim.command.claimgroup.delete: true
+      proclaim.command.claimgroup.rename: true
+      proclaim.command.claimgroup.setlimit: true
+      proclaim.command.claimgroup.list: true
+
+      
+  proclaim.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      proclaim.claims.*: true
+      proclaim.claims.admin.*: true
+      proclaim.command.*: true
+      proclaim.command.admin.*: true
