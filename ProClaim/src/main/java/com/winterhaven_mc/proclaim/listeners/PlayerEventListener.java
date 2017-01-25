@@ -561,7 +561,7 @@ public final class PlayerEventListener implements Listener {
 			return;
 		}
 
-		// check if clicked block is a note block
+		// check if clicked block is a daylight detector
 		if (blockType.equals(Material.DAYLIGHT_DETECTOR)
 				|| blockType.equals(Material.DAYLIGHT_DETECTOR_INVERTED)) {
 			

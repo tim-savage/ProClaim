@@ -22,8 +22,8 @@ public class HighlightElement {
 	 */
 	public HighlightElement(Location location, Material highlightMaterial) {
 		
-		this.setLocation(location);
-		this.setHighlightMaterial(highlightMaterial);	
+		this.location = location;
+		this.highlightMaterial = highlightMaterial;
 	}
 
 	public Location getLocation() {
