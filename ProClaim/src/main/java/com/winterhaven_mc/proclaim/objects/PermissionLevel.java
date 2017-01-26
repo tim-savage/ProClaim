@@ -61,24 +61,25 @@ public enum PermissionLevel {
 	
 	/**
 	 * Class constructor
-	 * @param value
+	 * @param value byte value to assign to PermissionLevel enum member
+	 * @param mask byte mask value to assign to PermissionLevel enum member
 	 */
-	private PermissionLevel(final byte value, final byte mask) {
+	PermissionLevel(final byte value, final byte mask) {
 		this.value = value;
 		this.mask = mask;
 	}
 	
 	/**
 	 * Get the mask value of a PermissionLevel
-	 * @return
+	 * @return byte mask value of PermissionLevel
 	 */
 	public final byte getMask() {
-		return mask;
+		return this.mask;
 	}
 
 	/**
 	 * Get the byte value of a PermissionLevel
-	 * @return
+	 * @return byte value of PermissionLevel
 	 */
 	public final byte toByte() {
 		return this.value;
@@ -87,10 +88,10 @@ public enum PermissionLevel {
 	
 	/**
 	 * Get a corresponding PermissionLevel from a byte value
-	 * @param value
-	 * @return ClaimPermission enum
+	 * @param value byte to retrieve corresponding PermissionLevel enum member
+	 * @return ClaimPermission enum member
 	 */
-	public final static PermissionLevel fromByte(final byte value) {
+	public static PermissionLevel fromByte(final byte value) {
 
 		PermissionLevel returnValue = PermissionLevel.NONE;
 		
@@ -107,7 +108,7 @@ public enum PermissionLevel {
 	 * Test if this permission level gives permission for passed permission level<br>
 	 * Example usage:<br>
 	 *  boolean iCanHazAccess = myPerm.allows(PermissionLevel.ACCESS);
-	 * @param p
+	 * @param p PermissionLevel to test
 	 * @return boolean
 	 */
 	public final boolean allows(final PermissionLevel p) {
@@ -125,7 +126,7 @@ public enum PermissionLevel {
 	 * Test if a permission level can grant for passed permission level<br>
 	 * Example usage:<br>
 	 *  boolean iCanGiveAccess = myPerm.canGrant(PermissionLevel.ACCESS)<br>
-	 * @param p
+	 * @param p PermissionLevel to test
 	 * @return boolean
 	 */
 	public final boolean canGrant(final PermissionLevel p) {
@@ -142,7 +143,7 @@ public enum PermissionLevel {
 
 	/**
 	 * Add a permission level to an existing permission level
-	 * @param p
+	 * @param p PermissionLevel to add
 	 * @return new permission level
 	 */
 	public final PermissionLevel add(final PermissionLevel p) {
@@ -152,6 +153,7 @@ public enum PermissionLevel {
 		}
 		
 		byte result = this.toByte();
+		//noinspection UnusedAssignment
 		return fromByte(result |= p.getMask());
 	}
 	
@@ -163,6 +165,7 @@ public enum PermissionLevel {
 	public final PermissionLevel addGrant() {
 		
 		byte result = this.toByte();
+		//noinspection UnusedAssignment
 		return fromByte(result |= GRANT.mask);
 	}
 	
@@ -173,8 +176,10 @@ public enum PermissionLevel {
 	 *  myPerm = PermissionLevel.addGrant(myPerm);
 	 */
 	// static version takes a permission level as parameter
+	@SuppressWarnings("unused")
 	public static PermissionLevel addGrant(final PermissionLevel p) {
 		byte result = p.value;
+		//noinspection UnusedAssignment
 		return fromByte(result |= GRANT.mask);
 	}
 	

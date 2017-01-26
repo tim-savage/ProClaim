@@ -17,7 +17,7 @@ public final class ExpireClaimsTask extends BukkitRunnable {
 
     /**
      * Class constructor
-     * @param plugin
+     * @param plugin reference to plugin main class
      */
     ExpireClaimsTask(PluginMain plugin) {
     	
@@ -43,7 +43,7 @@ public final class ExpireClaimsTask extends BukkitRunnable {
 		}
 		
 		// get Set of all claims
-		final Set<Claim> claims = new HashSet<Claim>(Claim.getAllClaims());
+		final Set<Claim> claims = new HashSet<>(Claim.getAllClaims());
 
 		// iterate over set of all claims
 		for (Claim claim : claims) {

@@ -14,10 +14,10 @@ public final class PlayerEarnedBlocksTask extends BukkitRunnable {
     
     /**
      * Class constructor
-     * @param plugin
-     * @param player
+     * @param plugin reference to plugin main class
+     * @param player player to aquire earned blocks
      */
-    public PlayerEarnedBlocksTask(final PluginMain plugin, final Player player) {
+	PlayerEarnedBlocksTask(final PluginMain plugin, final Player player) {
         this.plugin = plugin;
         this.player = player;
     }

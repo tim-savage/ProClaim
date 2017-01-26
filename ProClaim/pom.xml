@@ -74,6 +74,7 @@
 		</repository>
 
 		<repository>
+			<!-- exclude defunct repo -->
 			<id>vault-repo</id>
 			<url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
 			<releases>
@@ -85,51 +86,69 @@
 		</repository>
 	</repositories>
 
+	<!-- Dependencies -->
 	<dependencies>
+
+		<!-- Bukkit -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.9.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
+			<version>1.11-R0.1-SNAPSHOT</version>
 		</dependency>
+
+		<!-- VaultAPI -->
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
 			<version>1.6</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Multiverse -->
 		<dependency>
 			<groupId>com.onarandombox.multiversecore</groupId>
 			<artifactId>Multiverse-Core</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- WorldGuard -->
 		<dependency>
 			<groupId>com.sk89q</groupId>
 			<artifactId>worldguard</artifactId>
 			<version>6.1</version>
 			<scope>provided</scope>
 	    </dependency>
+
+		<!-- ConfigAccessorLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>config-accessor-lib</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<!-- StringUtilLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>string-util-lib</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<!-- LanguageManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>language-manager-lib</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<!-- SoundManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-manager-lib</artifactId>

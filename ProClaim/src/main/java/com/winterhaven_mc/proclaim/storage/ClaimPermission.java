@@ -21,9 +21,9 @@ public final class ClaimPermission {
 	
 	/**
 	 * Class constructor
-	 * @param claimKey
-	 * @param playerKey
-	 * @param permissionlevel
+	 * @param claimKey integer key for claim
+	 * @param playerUUID UUID of player
+	 * @param permissionlevel PermissionLevel object
 	 */
 	public ClaimPermission(final Integer claimKey, final UUID playerUUID, final PermissionLevel permissionlevel) {
 
@@ -41,11 +41,11 @@ public final class ClaimPermission {
 		this.permissionRecordKey = permissionRecordKey;
 	}
 	
-	public final Integer getClaimKey() {
+	final Integer getClaimKey() {
 		return claimKey;
 	}
 	
-	public final void setClaimKey(final Integer claimKey) {
+	final void setClaimKey(final Integer claimKey) {
 		this.claimKey = claimKey;
 	}
 
@@ -57,11 +57,11 @@ public final class ClaimPermission {
 		this.playerUUID = playerUUID;
 	}
 
-	public final PermissionLevel getPermissionLevel() {
+	final PermissionLevel getPermissionLevel() {
 		return permissionLevel;
 	}
 
-	public final void setPermissionLevel(final PermissionLevel permissionLevel) {
+	final void setPermissionLevel(final PermissionLevel permissionLevel) {
 		this.permissionLevel = permissionLevel;
 	}
 	
@@ -102,11 +102,11 @@ public final class ClaimPermission {
 	/**
 	 * Get a permission record from the datastore. If null record is returned, create
 	 * a record with claimKey and PlayerUUID and PermissionLevel.NONE
-	 * @param claimKey
-	 * @param playerUUID
-	 * @return A valid ClaimPermission record.
+	 * @param claimKey integer key of claim to retrieve permission
+	 * @param playerUUID UUID of player to retrieve permission
+	 * @return A valid ClaimPermission record
 	 */
-	public final static ClaimPermission getClaimPermission(final Integer claimKey, final UUID playerUUID) {
+	public static ClaimPermission getClaimPermission(final Integer claimKey, final UUID playerUUID) {
 		
 		if (claimKey == null) {
 			throw new NullPointerException("Cannot retrieve claim permission for null claim key.");

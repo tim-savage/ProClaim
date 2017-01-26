@@ -1,12 +1,9 @@
 package com.winterhaven_mc.proclaim.storage;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.winterhaven_mc.proclaim.PluginMain;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 final class ClaimGroupCache {
 	
@@ -22,7 +19,7 @@ final class ClaimGroupCache {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to plugin main class
 	 */
 	ClaimGroupCache(final PluginMain plugin) {
 		
@@ -30,35 +27,35 @@ final class ClaimGroupCache {
 		this.plugin = plugin;
 		
 		// initialize claim map
-		claimGroupMap = new ConcurrentHashMap<Integer,ClaimGroup>();
+		claimGroupMap = new ConcurrentHashMap<>();
 		
 		// initialize name index
-		claimGroupNameIndex = new ConcurrentHashMap<String, Integer>();
+		claimGroupNameIndex = new ConcurrentHashMap<>();
 	}
 
 	
-	/**
-	 * Get all claims from claim map
-	 * @return Collection of all claims
-	 */
-	final Set<ClaimGroup> fetchAllClaimGroups() {
-		
-		// if claim group map is empty, return empty set
-		if (claimGroupMap.isEmpty()) {
-			return Collections.emptySet();
-		}
-		
-		// get new set of claim group values
-		final Set<ClaimGroup> returnSet = new HashSet<ClaimGroup>(claimGroupMap.values());
-		
-		// return unmodifiable set of claim groups
-		return Collections.unmodifiableSet(returnSet);
-	}
+//	/**
+//	 * Get all claims from claim map
+//	 * @return Collection of all claims
+//	 */
+//	final Set<ClaimGroup> fetchAllClaimGroups() {
+//
+//		// if claim group map is empty, return empty set
+//		if (claimGroupMap.isEmpty()) {
+//			return Collections.emptySet();
+//		}
+//
+//		// get new set of claim group values
+//		final Set<ClaimGroup> returnSet = new HashSet<ClaimGroup>(claimGroupMap.values());
+//
+//		// return unmodifiable set of claim groups
+//		return Collections.unmodifiableSet(returnSet);
+//	}
 
 	
 	/**
 	 * Retrieve claim group from cache by claim group key
-	 * @param claimGroupKey
+	 * @param claimGroupKey key of claim group to retrieve from cache
 	 * @return claim group object or null if not found
 	 */
 	final ClaimGroup fetch(final Integer claimGroupKey) {
@@ -75,7 +72,7 @@ final class ClaimGroupCache {
 
 	/**
 	 * Retrieve claim group from cache by claim group name
-	 * @param claimGroupName
+	 * @param claimGroupName name of claim group to retrieve from cache
 	 * @return claim group object or null if not found
 	 */
 	final ClaimGroup fetch(final String claimGroupName) {
@@ -97,7 +94,7 @@ final class ClaimGroupCache {
 
 	/**
 	 * Insert a claim group into the cache
-	 * @param claimGroup
+	 * @param claimGroup claim group to insert into cache
 	 */
 	final void store(final ClaimGroup claimGroup) {
 		
@@ -122,7 +119,7 @@ final class ClaimGroupCache {
 		
 		// remove all index entries of claim group name in case claim group name has changed
 		for (String key : claimGroupNameIndex.keySet()) {
-			if (claimGroupNameIndex.get(key).equals(claimGroupName.toLowerCase())) {
+			if (key.equalsIgnoreCase(claimGroupName)) {
 				claimGroupNameIndex.remove(key);
 			}
 		}
@@ -134,7 +131,7 @@ final class ClaimGroupCache {
 	
 	/**
 	 * Remove claim group from cache by key<br>
-	 * @param playerName
+	 * @param claimGroupKey key of claim to be removed from cache
 	 */
 	final void flush(final Integer claimGroupKey) {
 
@@ -150,18 +147,15 @@ final class ClaimGroupCache {
 
 
 	final int getSize() {
-		if (claimGroupMap == null) {
-			return 0;
-		}
 		return claimGroupMap.keySet().size();
 	}
 
-	/**
-	 * Get claim group map keys
-	 * @return Set of Integer map keys
-	 */
-	final Set<Integer> getCacheMapKeys() {
-		return Collections.unmodifiableSet(claimGroupMap.keySet());
-	}
+//	/**
+//	 * Get claim group map keys
+//	 * @return Set of Integer map keys
+//	 */
+//	final Set<Integer> getCacheMapKeys() {
+//		return Collections.unmodifiableSet(claimGroupMap.keySet());
+//	}
 
 }

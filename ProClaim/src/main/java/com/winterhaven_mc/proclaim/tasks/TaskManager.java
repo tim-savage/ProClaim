@@ -17,13 +17,13 @@ public final class TaskManager {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to plugin main class
 	 */
 	public TaskManager(final PluginMain plugin) {
 		this.plugin = plugin;
 		
 		// initalize playerTaskMap
-		this.playerTaskMap = new HashMap<UUID,HashSet<BukkitTask>>();
+		this.playerTaskMap = new HashMap<>();
 		
 		// start expire claims task, repeat every hour after initial no delay run
 		new ExpireClaimsTask(plugin).runTaskTimer(plugin,0,72000);
@@ -31,7 +31,7 @@ public final class TaskManager {
 	
 	/**
 	 * Start task to accrue player earned blocks
-	 * @param player
+	 * @param player player to accrue earned blocks
 	 */
 	public final void startPlayerEarnedBlocksTask(final Player player) {
 		
@@ -43,7 +43,7 @@ public final class TaskManager {
 
         // if playerTasks HashSet is null, create a new one
         if (playerTasks == null) {
-        	playerTasks = new HashSet<BukkitTask>();
+        	playerTasks = new HashSet<>();
         }
         
         // add task to hashset
@@ -61,7 +61,7 @@ public final class TaskManager {
 	
 	/**
 	 * Cancel all player tasks
-	 * @param player
+	 * @param player cancel recurring tasks for this player
 	 */
 	public final void cancelPlayerTasks(final Player player) {
 		

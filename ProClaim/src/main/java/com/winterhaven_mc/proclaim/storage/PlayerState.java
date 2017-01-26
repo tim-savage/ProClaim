@@ -60,7 +60,7 @@ public final class PlayerState {
 	/**
 	 * Class constructor
 	 * create PlayerState object from bukkit player object
-	 * @param player
+	 * @param player bukkit player object used to create new PlayerState object
 	 */
 	public PlayerState(final Player player) {
 		
@@ -97,11 +97,11 @@ public final class PlayerState {
 		this.lastLogin = Instant.now();
 	}
 
-	public final void setLastLogin(final Instant lastLogin) {
+	final void setLastLogin(final Instant lastLogin) {
 		this.lastLogin = lastLogin;
 	}
 
-	public final void setLastLogin(final Long lastLogin) {
+	final void setLastLogin(final Long lastLogin) {
 		this.lastLogin = Instant.ofEpochMilli(lastLogin);
 	}
 
@@ -109,6 +109,7 @@ public final class PlayerState {
 		return earnedClaimBlocks;
 	}
 
+	@SuppressWarnings("unused")
 	public final void setEarnedClaimBlocks() {
 		this.earnedClaimBlocks = 0;
 	}
@@ -117,15 +118,16 @@ public final class PlayerState {
 		this.earnedClaimBlocks = earnedClaimBlocks;
 	}
 
-	public final int getPurchasedClaimBlocks() {
+	final int getPurchasedClaimBlocks() {
 		return purchasedClaimBlocks;
 	}
 
+	@SuppressWarnings("unused")
 	public final void setPurchasedClaimBlocks() {
 		this.purchasedClaimBlocks = 0;
 	}
 
-	public final void setPurchasedClaimBlocks(final int purchasedClaimBlocks) {
+	final void setPurchasedClaimBlocks(final int purchasedClaimBlocks) {
 		this.purchasedClaimBlocks = purchasedClaimBlocks;
 	}
 
@@ -133,6 +135,7 @@ public final class PlayerState {
 		return bonusClaimBlocks;
 	}
 
+	@SuppressWarnings("unused")
 	public void setBonusClaimBlocks() {
 		this.bonusClaimBlocks = 0;
 	}
@@ -255,7 +258,6 @@ public final class PlayerState {
 		// finally, remove blocks from earned blocks
 		if (blocksToRemove <= this.getEarnedClaimBlocks()) {
 			this.setEarnedClaimBlocks(this.getEarnedClaimBlocks() - blocksToRemove);
-			return;
 		}
 		else {
 			this.setEarnedClaimBlocks(0);
@@ -270,7 +272,6 @@ public final class PlayerState {
 	
 	/**
 	 * Change conflicting player names to a temporary name until next login
-	 * @param player
 	 */
 	public final void resolveNameConflicts() {
 	
@@ -311,10 +312,10 @@ public final class PlayerState {
 	
 	/**
 	 * Get player state by player uuid
-	 * @param playerUUID
-	 * @return
+	 * @param playerUUID player UUID to retrieve record
+	 * @return player state record
 	 */
-	public final static PlayerState getPlayerState(final UUID playerUUID) {
+	public static PlayerState getPlayerState(final UUID playerUUID) {
 		return plugin.dataStore.getPlayerState(playerUUID);
 	}
 

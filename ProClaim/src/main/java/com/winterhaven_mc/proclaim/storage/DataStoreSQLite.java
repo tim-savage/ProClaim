@@ -40,11 +40,11 @@ public final class DataStoreSQLite extends DataStore {
 	
 	// claim group cache
 	private final ClaimGroupCache claimGroupCache;
-	
+
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin refernce to plugin main class
 	 */
 	DataStoreSQLite (final PluginMain plugin) {
 
@@ -75,7 +75,7 @@ public final class DataStoreSQLite extends DataStore {
 	 * Initialize the SQLite datastore<br>
 	 * Creates database tables if they don't already exist<br>
 	 * Inserts player 0 (public) in player table if not already there
-	 * @throws SQLException
+	 * @throws SQLException if datastore can not be initialized
 	 */
 	@Override
 	final void initialize() throws SQLException {
@@ -96,52 +96,6 @@ public final class DataStoreSQLite extends DataStore {
 		String jdbc = "jdbc:sqlite";
 		String dbUrl = jdbc + ":" + databaseFile;
 
-		// sql statement to create players table if it doesn't already exist
-		//final String sqlCreatePlayerTable = "CREATE TABLE IF NOT EXISTS players ( "
-		//		+ "playerkey INTEGER PRIMARY KEY AUTOINCREMENT, "
-		//		+ "playeruuid VARCHAR(36), "
-		//		+ "playername VARCHAR(16), "
-		//		+ "lastlogin TIMEDATE, "
-		//		+ "earnedblocks INTEGER, "
-		//		+ "purchasedblocks INTEGER, "
-		//		+ "bonusblocks INTEGER, "
-		//		+ "UNIQUE (playeruuid) )";
-
-		// sql statement to create claims table if it doesn't already exist
-		//final String sqlCreateClaimTable = "CREATE TABLE IF NOT EXISTS claims ( "
-		//		+ "claimkey INTEGER PRIMARY KEY AUTOINCREMENT, "
-		//		+ "owneruuid VARCHAR(36), "
-		//		+ "parentclaimkey INTEGER, "
-		//		+ "claimgroupkey INTEGER, "
-		//		+ "locked BOOLEAN, "
-		//		+ "resizable BOOLEAN, "
-		//		+ "worldname STRING, "
-		//		+ "x1 INTEGER, y1 INTEGER, z1 INTEGER, "
-		//		+ "x2 INTEGER, y2 INTEGER, z2 INTEGER, "
-		//		+ "ctime TIMEDATE, "
-		//		+ "mtime TIMEDATE )";
-
-		// sql statement to create permissions table if it doesn't already exist
-		//final String sqlMakePermissionTable = "CREATE TABLE IF NOT EXISTS permissions ( "
-		//		+ "permissionkey INTEGER PRIMARY KEY AUTOINCREMENT, "
-		//		+ "claimkey INTEGER, "
-		//		+ "playerkey INTEGER, "
-		//		+ "permission INTEGER, "
-		//		+ "UNIQUE (claimkey,playerkey) )";
-		
-		// sql statement to create claimgroups table if it doesn't already exist
-		//final String sqlCreateClaimGroupTable = "CREATE TABLE IF NOT EXISTS claimgroups ( "
-		//		+ "claimgroupkey INTEGER PRIMARY KEY AUTOINCREMENT, "
-		//		+ "groupname STRING UNIQUE, "
-		//		+ "claimlimit INTEGER )";
-		
-		// sql statement to insert player 0 (public) in players table
-//		final String sqlInsertPublicPlayer = "INSERT OR IGNORE INTO players (playerkey,playername,playeruuid) "
-//				+ "VALUES (0,'[public]','" + zeroUUID.toString() + "')";
-
-//		final String InsertPublicPlayer = 
-//				MessageFormat.format(Queries.getQuery("InsertPublicPlayer"), zeroUUID.toString());
-		
 		// create a database connection
 		connection = DriverManager.getConnection(dbUrl);
 		Statement statement = connection.createStatement();
@@ -222,6 +176,7 @@ public final class DataStoreSQLite extends DataStore {
 		// get path name to data store file
 		File dataStoreFile = new File(plugin.getDataFolder() + File.separator + this.getFilename());
 		if (dataStoreFile.exists()) {
+			//noinspection ResultOfMethodCallIgnored
 			dataStoreFile.delete();
 		}
 	}
@@ -273,7 +228,7 @@ public final class DataStoreSQLite extends DataStore {
 	@Override
 	final Set<PlayerState> getAllPlayerRecords() {
 	
-		Set<PlayerState> returnSet = new HashSet<PlayerState>();
+		Set<PlayerState> returnSet = new HashSet<>();
 	
 		try {
 			PreparedStatement preparedStatement = 
@@ -336,7 +291,7 @@ public final class DataStoreSQLite extends DataStore {
 		}
 		
 		// create new hash set for return data
-		Set<PlayerState> returnSet = new HashSet<PlayerState>();
+		Set<PlayerState> returnSet = new HashSet<>();
 		
 		try {
 			PreparedStatement preparedStatement = 
@@ -389,6 +344,7 @@ public final class DataStoreSQLite extends DataStore {
 				e.printStackTrace();
 			}
 		}
+		//noinspection ConstantConditions
 		return Collections.unmodifiableSet(returnSet);
 	}
 
@@ -396,7 +352,7 @@ public final class DataStoreSQLite extends DataStore {
 	/**
 	 * Get player record by UUID
 	 */
-	private final PlayerState selectPlayerRecord(final UUID playerUUID) {
+	private PlayerState selectPlayerRecord(final UUID playerUUID) {
 		
 		// if playerUUID is null, return null record
 		if (playerUUID == null) {
@@ -481,8 +437,8 @@ public final class DataStoreSQLite extends DataStore {
 			}
 
 			// synchronize on database connection
-			synchronized(connection) {
-				
+			synchronized(this) {
+
 				PreparedStatement preparedStatement;
 				preparedStatement = connection.prepareStatement(Queries.getQuery("InsertPlayerRecord"));
 
@@ -495,7 +451,7 @@ public final class DataStoreSQLite extends DataStore {
 
 				preparedStatement.executeUpdate();
 			}
-			
+
 			if (plugin.debug) {
 				plugin.getLogger().info("Player state for " + playerState.getName() 
 				+ " inserted into the " + getDisplayName() + " datastore.");
@@ -546,7 +502,7 @@ public final class DataStoreSQLite extends DataStore {
 					}
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 						
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("InsertPlayerRecord"));
@@ -607,7 +563,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 						
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("UpdatePlayerRecord"));
@@ -660,17 +616,17 @@ public final class DataStoreSQLite extends DataStore {
 		if (playerUUID == null) {
 			return;
 		}
-	
+
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 
-				int rowsAffected = 0;
+				int rowsAffected;
 
 				try {
-					
+
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement;
@@ -687,7 +643,7 @@ public final class DataStoreSQLite extends DataStore {
 						}
 
 						// delete player permission records
-						preparedStatement = 
+						preparedStatement =
 								connection.prepareStatement(Queries.getQuery("DeletePlayerPermissions"));
 
 						preparedStatement.setString(1, playerUUID.toString());
@@ -695,7 +651,7 @@ public final class DataStoreSQLite extends DataStore {
 						// execute prepared statement
 						rowsAffected = preparedStatement.executeUpdate();
 					}
-					
+
 					// output debugging information
 					if (plugin.debug) {
 						plugin.getLogger().info(rowsAffected + " player permission records deleted.");
@@ -726,11 +682,10 @@ public final class DataStoreSQLite extends DataStore {
 			}
 		}.runTaskAsynchronously(plugin);
 
-		return;
 	}
 
 
-	final private void cacheAllClaimRecords() {
+	private void cacheAllClaimRecords() {
 		
 		int count = 0;
 		for (Claim claim : this.getAllClaims()) {
@@ -750,7 +705,7 @@ public final class DataStoreSQLite extends DataStore {
 	@Override
 	final public Set<Claim> getAllClaims() {
 		
-		final Set<Claim> returnSet = new HashSet<Claim>();
+		final Set<Claim> returnSet = new HashSet<>();
 
 		try {
 			
@@ -847,7 +802,7 @@ public final class DataStoreSQLite extends DataStore {
 	
 	/**
 	 * Get child keys of claim
-	 * @param claimKey
+	 * @param claimKey integer key of claim to retrieve child keys
 	 * @return Set of Integer child keys; empty Set if no records found 
 	 */
 	@Override
@@ -862,7 +817,7 @@ public final class DataStoreSQLite extends DataStore {
 		}
 		
 		// create empty set for return
-		HashSet<Integer> returnSet = new HashSet<Integer>();
+		HashSet<Integer> returnSet = new HashSet<>();
 		
 		// get set of child claims
 		Set<Claim> childClaims = plugin.dataStore.getChildClaims(claimKey);
@@ -925,7 +880,7 @@ public final class DataStoreSQLite extends DataStore {
 	 * Get claim record by claim key
 	 */
 	@SuppressWarnings("unused")
-	private final Claim selectClaimRecord(final Integer claimKey) {
+	private Claim selectClaimRecord(final Integer claimKey) {
 		
 		// if claim key is null, return null record
 		if (claimKey == null) {
@@ -1022,7 +977,7 @@ public final class DataStoreSQLite extends DataStore {
 	}
 	
 	@SuppressWarnings("unused")
-	private final Claim selectClaimAt(final Location location, final boolean ignoreHeight) {
+	private Claim selectClaimAt(final Location location, final boolean ignoreHeight) {
 	
 		Claim claim = new Claim();
 		
@@ -1065,6 +1020,7 @@ public final class DataStoreSQLite extends DataStore {
 				preparedStatement.setInt(3, x);
 				preparedStatement.setInt(4, z);
 				preparedStatement.setInt(5, z);
+				//noinspection SuspiciousNameCombination
 				preparedStatement.setInt(6, y);
 			}
 			
@@ -1153,7 +1109,7 @@ public final class DataStoreSQLite extends DataStore {
 		try {
 
 			// if claim owner uuid is null, insert all zero uuid
-			String ownerUUIDString = "";
+			String ownerUUIDString;
 			if (claim.getOwnerUUID() != null) {
 				ownerUUIDString = claim.getOwnerUUID().toString();
 			}
@@ -1162,7 +1118,7 @@ public final class DataStoreSQLite extends DataStore {
 			}
 
 			// synchronize on database connection
-			synchronized(connection) {
+			synchronized(this) {
 
 				PreparedStatement preparedStatement;
 				preparedStatement = connection.prepareStatement(Queries.getQuery("InsertClaimRecord"),
@@ -1243,7 +1199,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 
 					// if claim owner uuid is null, insert all zero uuid
-					String ownerUUIDString = "";
+					String ownerUUIDString;
 					if (claim.getOwnerUUID() != null) {
 						ownerUUIDString = claim.getOwnerUUID().toString();
 					}
@@ -1252,7 +1208,7 @@ public final class DataStoreSQLite extends DataStore {
 					}
 
 					// synchronize on connection database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("InsertClaimRecord"),
@@ -1348,7 +1304,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 					
 					// if claim owner uuid is null, insert all zero uuid
-					String ownerUUIDString = "";
+					String ownerUUIDString;
 					if (claim.getOwnerUUID() != null) {
 						ownerUUIDString = claim.getOwnerUUID().toString();
 					}
@@ -1357,7 +1313,7 @@ public final class DataStoreSQLite extends DataStore {
 					}
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("UpdateClaimRecord"));
@@ -1429,12 +1385,12 @@ public final class DataStoreSQLite extends DataStore {
 			@Override
 			public void run() {
 
-				int rowsAffected = 0;
+				int rowsAffected;
 
 				try {
 
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement;
@@ -1486,7 +1442,7 @@ public final class DataStoreSQLite extends DataStore {
 					public void run() {
 						
 						// get all child claim keys, also to be removed
-						Set<Integer> deleteKeys = new HashSet<Integer>(getChildKeys(claimKey));
+						Set<Integer> deleteKeys = new HashSet<>(getChildKeys(claimKey));
 						
 						// add claim key to set
 						deleteKeys.add(claimKey);
@@ -1508,13 +1464,12 @@ public final class DataStoreSQLite extends DataStore {
 			}
 		}.runTaskAsynchronously(plugin);
 
-		return;
 	}
 	
 	/**
 	 * Load all claim permissions into cache
 	 */
-	private final void cacheAllClaimPermissions() {
+	private void cacheAllClaimPermissions() {
 		
 		int count = 0;
 		for (ClaimPermission claimPermission : this.getAllClaimPermissions()) {
@@ -1533,7 +1488,7 @@ public final class DataStoreSQLite extends DataStore {
 	final Set<ClaimPermission> getAllClaimPermissions() {
 
 		// create new HashSet for return
-		Set<ClaimPermission> returnSet = new HashSet<ClaimPermission>();
+		Set<ClaimPermission> returnSet = new HashSet<>();
 		
 		PreparedStatement preparedStatement;
 		
@@ -1601,15 +1556,8 @@ public final class DataStoreSQLite extends DataStore {
 			return null;
 		}
 		
-		// try to retrieve permission record from cache
-		final ClaimPermission claimPermission = permissionCache.fetch(permissionRecordKey);
-		
-		// all permission records are stored in cache, so not trying datastore at this point.
-		// for caching permission records on demand, a negative result would also need to be cached
-		// to prevent excessive database lookups when no record exists
-		
-		// return record; will be null if no record found
-		return claimPermission;
+		// return record from cache; will be null if no record found
+		return permissionCache.fetch(permissionRecordKey);
 	}
 	
 
@@ -1625,7 +1573,7 @@ public final class DataStoreSQLite extends DataStore {
 	 * get player permission level for claim by claimKey, playerUUID 
 	 */
 	@SuppressWarnings("unused")
-	private final ClaimPermission selectPermissionRecord(final Integer claimKey, final UUID playerUUID) {
+	private ClaimPermission selectPermissionRecord(final Integer claimKey, final UUID playerUUID) {
 	
 		// if claim key is null, return null record
 		if (claimKey == null) {
@@ -1676,8 +1624,8 @@ public final class DataStoreSQLite extends DataStore {
 					+ "select a permission record from the " + getDisplayName() + " datastore.");
 		}
 		
-		// if permission record is null or permission level is null, return null record
-		if (claimPermission == null || claimPermission.getPermissionLevel() == null) {
+		// if permission level is null, return null record
+		if (claimPermission.getPermissionLevel() == null) {
 			return null;
 		}
 		
@@ -1690,7 +1638,7 @@ public final class DataStoreSQLite extends DataStore {
 	 * get player (or group) permission level for claim by permission record key
 	 */
 	@SuppressWarnings("unused")
-	private final ClaimPermission selectPermissionRecord(final Integer permissionRecordKey) {
+	private ClaimPermission selectPermissionRecord(final Integer permissionRecordKey) {
 	
 		// if permission record key is null, return null record
 		if (permissionRecordKey == null) {
@@ -1731,8 +1679,8 @@ public final class DataStoreSQLite extends DataStore {
 					+ "select a permission record from the " + getDisplayName() + " datastore.");
 		}
 		
-		// if permission record is null or permission level is null, return null record
-		if (claimPermission == null || claimPermission.getPermissionLevel() == null) {
+		// if permission level is null, return null record
+		if (claimPermission.getPermissionLevel() == null) {
 			return null;
 		}
 		
@@ -1753,7 +1701,7 @@ public final class DataStoreSQLite extends DataStore {
 		try {
 
 			// synchronize on database connection
-			synchronized(connection) {
+			synchronized(this) {
 
 				PreparedStatement preparedStatement;
 				preparedStatement = connection.prepareStatement(Queries.getQuery("InsertPermissionRecord"),
@@ -1812,7 +1760,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("InsertPermissionRecord"),
@@ -1911,7 +1859,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("UpdatePermissionRecord"));
@@ -1970,10 +1918,10 @@ public final class DataStoreSQLite extends DataStore {
 	
 				try {
 					
-					int rowsAffected = 0;
+					int rowsAffected;
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement = 
 								connection.prepareStatement(Queries.getQuery("DeletePermissionRecordsForClaim"));
@@ -2014,8 +1962,8 @@ public final class DataStoreSQLite extends DataStore {
 
 	/**
 	 * Delete player's claim permissions by claimKey, playerKey
-	 * @param claim
-	 * @param playerKey
+	 * @param claimKey integer key of claim to delete permission
+	 * @param playerUUID UUID of player to delete permission
 	 */
 	@Override
 	final void deletePlayerClaimPermission(final Integer claimKey, final UUID playerUUID) {
@@ -2051,10 +1999,10 @@ public final class DataStoreSQLite extends DataStore {
 	
 				try {
 					
-					int rowsAffected = 0;
+					int rowsAffected;
 
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = 
@@ -2091,7 +2039,7 @@ public final class DataStoreSQLite extends DataStore {
 	}
 	
 	
-	final private void cacheAllClaimGroupRecords() {
+	private void cacheAllClaimGroupRecords() {
 		
 		int count = 0;
 		for (ClaimGroup claimGroup : this.getAllClaimGroups()) {
@@ -2111,7 +2059,7 @@ public final class DataStoreSQLite extends DataStore {
 	@Override
 	final Set<ClaimGroup> getAllClaimGroups() {
 	
-		Set<ClaimGroup> returnSet = new HashSet<ClaimGroup>();
+		Set<ClaimGroup> returnSet = new HashSet<>();
 	
 		try {
 			// create prepared statement
@@ -2149,8 +2097,8 @@ public final class DataStoreSQLite extends DataStore {
 
 	/**
 	 * Get number of claims in group owned by player, by playerUUID
-	 * @param claimGroup
-	 * @param playerUUID
+	 * @param claimGroup claim group object to count claim membership
+	 * @param playerUUID UUID of player to count claim ownership
 	 * @return int number of claims owned by player in claim group
 	 */
 	@Override
@@ -2171,7 +2119,7 @@ public final class DataStoreSQLite extends DataStore {
 	
 	/**
 	 * Get claim group by name
-	 * @param claimGroupName
+	 * @param claimGroupName string name of claim group to retrieve
 	 * @return ClaimGroup
 	 */
 	@Override
@@ -2185,13 +2133,10 @@ public final class DataStoreSQLite extends DataStore {
 			return null;
 		}
 		
-		// try to retrieve claim group record from cache
-		ClaimGroup claimGroup = claimGroupCache.fetch(claimGroupName);
-		
 		// all claim group records are stored in cache, so not trying datastore at this point.
 
 		// return claim group record; will be null if no record found
-		return claimGroup;
+		return claimGroupCache.fetch(claimGroupName);
 	}
 
 	
@@ -2206,20 +2151,16 @@ public final class DataStoreSQLite extends DataStore {
 			return null;
 		}
 		
-		// try to retrieve claim group record from cache
-		ClaimGroup claimGroup = claimGroupCache.fetch(claimGroupKey);
-		
 		// all claim group records are stored in cache, so not trying datastore at this point.
-
 		// return claim group record; will be null if no record found
-		return claimGroup;
+		return claimGroupCache.fetch(claimGroupKey);
 	}
 	
 	/**
 	 * Get claim group by claimGroupKey
 	 */
 	@SuppressWarnings("unused")
-	final private ClaimGroup selectClaimGroupRecord(final Integer claimGroupKey) {
+	private ClaimGroup selectClaimGroupRecord(final Integer claimGroupKey) {
 
 		// claimGroupId is null or zero, return a null claimGroup
 		if (claimGroupKey == null || claimGroupKey == 0) {
@@ -2279,7 +2220,7 @@ public final class DataStoreSQLite extends DataStore {
 		try {
 
 			// synchronize on database connection
-			synchronized(connection) {
+			synchronized(this) {
 
 				// create prepared statement
 				PreparedStatement preparedStatement;
@@ -2340,7 +2281,7 @@ public final class DataStoreSQLite extends DataStore {
 				try {
 
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement = 
@@ -2408,10 +2349,10 @@ public final class DataStoreSQLite extends DataStore {
 
 				try {
 					
-					int rowsAffected = 0;
+					int rowsAffected;
 					
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						PreparedStatement preparedStatement;
 						preparedStatement = connection.prepareStatement(Queries.getQuery("UpdateClaimGroupRecord"));
@@ -2471,10 +2412,10 @@ public final class DataStoreSQLite extends DataStore {
 
 				try {
 
-					int rowsAffected = 0;
+					int rowsAffected;
 
 					// synchronize on database connection
-					synchronized(connection) {
+					synchronized(this) {
 
 						// create prepared statement
 						PreparedStatement preparedStatement = 
@@ -2532,7 +2473,6 @@ public final class DataStoreSQLite extends DataStore {
 				}.runTask(plugin);
 			}
 		}.runTaskAsynchronously(plugin);
-
-		return;
 	}
+
 }

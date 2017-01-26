@@ -75,8 +75,12 @@ final class WorldGuardWrapper {
 			// create WorldGuard region for claim
 			WorldGuardRegionHolder regionHolder = new WorldGuardRegionHolder(claim);
 
+			RegionManager regions = null;
+
 			// get WorldGuard region manager for claim world
-			RegionManager regions = this.regionContainer.get(claim.getWorld());
+			if (claim.getWorld() != null) {
+				regions = this.regionContainer.get(claim.getWorld());
+			}
 
 			// add claim region to region manager
 			if (regions != null) {
@@ -88,9 +92,9 @@ final class WorldGuardWrapper {
 	
 	/**
 	 * synchronize WorldGuard region for claim
-	 * @param claim
+	 * @param claim claim to synchronize WorldGuard region
 	 */
-	public final void syncRegion(final Claim claim) {
+	final void syncRegion(final Claim claim) {
 		
 		/*
 		 * If region for claim exists, check coordinates and recreate region only if they differ
@@ -105,8 +109,12 @@ final class WorldGuardWrapper {
 				return;
 			}
 			
+			RegionManager regions = null;
+
 			// get WorldGuard region manager for claim world
-			RegionManager regions =  this.regionContainer.get(claim.getWorld());
+			if (claim.getWorld() != null) {
+				regions = this.regionContainer.get(claim.getWorld());
+			}
 
 			if (regions != null) {
 
@@ -117,7 +125,8 @@ final class WorldGuardWrapper {
 					ProtectedRegion claimRegion = regions.getRegion("proclaim-" + claim.getKey());
 					
 					// if region coordinates match claim coordinates, do nothing and return
-					if (claim.getUpperCorner().getBlockX() == claimRegion.getMaximumPoint().getBlockX()
+					if (claimRegion != null && claimRegion.getMaximumPoint() != null
+							&& claim.getUpperCorner().getBlockX() == claimRegion.getMaximumPoint().getBlockX()
 							&& claim.getUpperCorner().getBlockZ() == claimRegion.getMaximumPoint().getBlockZ()
 							&& claim.getUpperCorner().getBlockY() == claimRegion.getMaximumPoint().getBlockY()) {
 
@@ -137,15 +146,19 @@ final class WorldGuardWrapper {
 	
 	/**
 	 * Remove WorldGuard region for claim
-	 * @param claim
+	 * @param claim to remove WorldGuard region
 	 */
-	public final void removeRegion(final Claim claim) {
+	final void removeRegion(final Claim claim) {
 
 		// check if WorldGuard is enabled
 		if (worldGuardPlugin != null) {
 
+			RegionManager regions = null;
+
 			// get WorldGuard region manager for claim world
-			RegionManager regions =  this.regionContainer.get(claim.getWorld());
+			if (claim.getWorld() != null) {
+				regions = this.regionContainer.get(claim.getWorld());
+			}
 
 			// remove claim region from region manager
 			if (regions != null) {
@@ -157,11 +170,11 @@ final class WorldGuardWrapper {
 	
 	/**
 	 * Check if a claim overlaps a WorldGuard region in which the player does not have build permission
-	 * @param claim
-	 * @param player
-	 * @return
+	 * @param claim claim to check for WorldGuard region overlap
+	 * @param player player to check for build permission in overlapping WorldGuard region
+	 * @return boolean
 	 */
-	public final boolean overlaps(final Claim claim, final Player player) {
+	final boolean overlaps(final Claim claim, final Player player) {
 		
 		if (worldGuardPlugin == null) {
 			return false;
@@ -170,8 +183,12 @@ final class WorldGuardWrapper {
 		// convert player to WorldGuard LocalPlayer
 		LocalPlayer localPlayer = worldGuardPlugin.wrapPlayer(player);
 
+		RegionManager regions = null;
+
 		// get WorldGuard region manager for claim world
-		RegionManager regions =  this.regionContainer.get(claim.getWorld());
+		if (claim.getWorld() != null) {
+			regions = this.regionContainer.get(claim.getWorld());
+		}
 
 		// expand claim coordinates vertically to limits (upper Y is already world max height)
 		Location lowerCorner = claim.getLowerCorner().clone();
@@ -184,27 +201,29 @@ final class WorldGuardWrapper {
 		// create test region from claim coordinates
 		ProtectedRegion test = new ProtectedCuboidRegion("proclaim-test-region",
 				lowerCornerBlockVector, upperCornerBlockVector);
-		
-		// get regions that overlap
-		ApplicableRegionSet set = regions.getApplicableRegions(test);
 
-		
+		ApplicableRegionSet set = null;
+		if (regions != null) {
+			set = regions.getApplicableRegions(test);
+		}
+
 		boolean doesOverlap = false;
 		
 		// if region build flag is null and player is NOT member then overlap = true
 		// else if region build flag is deny then overlap = true
 		// (implicit) else overlap = false
-		
-		for (ProtectedRegion region : set) {
-			if (region.getFlag(DefaultFlag.BUILD) == null) { 
-				if (!region.isMember(localPlayer)) {
+
+		if (set != null) {
+			for (ProtectedRegion region : set) {
+				if (region.getFlag(DefaultFlag.BUILD) == null) {
+					if (!region.isMember(localPlayer)) {
+						doesOverlap = true;
+						break;
+					}
+				} else if (State.DENY.equals(region.getFlag(DefaultFlag.BUILD))) {
 					doesOverlap = true;
 					break;
 				}
-			}
-			else if (region.getFlag(DefaultFlag.BUILD).equals(State.DENY)) {
-				doesOverlap = true;
-				break;
 			}
 		}
 		return doesOverlap;

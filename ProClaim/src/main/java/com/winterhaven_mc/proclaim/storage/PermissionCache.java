@@ -22,7 +22,7 @@ final class PermissionCache {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to plugin main class
 	 */
 	PermissionCache(final PluginMain plugin) {
 		
@@ -30,16 +30,16 @@ final class PermissionCache {
 		this.plugin = plugin;
 		
 		// initialize permission record map
-		permissionMap = new ConcurrentHashMap<Integer,ClaimPermission>();
+		permissionMap = new ConcurrentHashMap<>();
 		
 		// initialize claim key index
-		claimIndex = new ConcurrentHashMap<Integer,HashSet<Integer>>();
+		claimIndex = new ConcurrentHashMap<>();
 	}
 
 	
 	/**
 	 * Retrieve permission record from cache by permission record key
-	 * @param claimKey
+	 * @param permissionRecordKey key of record to retrieve from cache
 	 * @return permission record object or null if not found
 	 */
 	final ClaimPermission fetch(final Integer permissionRecordKey) {
@@ -58,7 +58,7 @@ final class PermissionCache {
 	
 	/**
 	 * Retrieve permission record from cache by claim key and player uuid
-	 * @param claimKey
+	 * @param claimKey key of claim to retrieve from cache
 	 * @return permission record object or null if not found
 	 */
 	final ClaimPermission fetch(final Integer claimKey, final UUID playerUUID) {
@@ -97,7 +97,7 @@ final class PermissionCache {
 	
 	/**
 	 * Insert a permission record into the cache
-	 * @param claimPermission
+	 * @param claimPermission record to insert into cache
 	 */
 	final void store(final ClaimPermission claimPermission) {
 		
@@ -140,7 +140,7 @@ final class PermissionCache {
 		
 		// if no index entry for claim key exists, create empty HashSet and insert into index
 		if (!claimIndex.containsKey(claimPermission.getClaimKey())) {
-			claimIndex.put(claimPermission.getClaimKey(), new HashSet<Integer>());
+			claimIndex.put(claimPermission.getClaimKey(), new HashSet<>());
 		}
 		
 		// insert claim key to record key index entry
@@ -150,7 +150,7 @@ final class PermissionCache {
 	
 	/**
 	 * Remove permission record from cache by permission record key
-	 * @param permissionRecordKey
+	 * @param permissionRecordKey key of record to remove from cache
 	 */
 	final void flush(final Integer permissionRecordKey) {
 		
@@ -173,66 +173,63 @@ final class PermissionCache {
 	}
 
 
-	/**
-	 * Remove permission record from cache by permission claim key and player uuid
-	 * @param permissionRecordKey
-	 */
-	final void flush(final Integer claimKey, final Integer playerUUID) {
-		
-		if (claimKey == null) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Could not flush permission record from cache because "
-						+ "claim key is null.");
-			}
-			return;
-		}
-		if (playerUUID == null) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Could not flush permission record from cache because "
-						+ "player uuid is null.");
-			}
-			return;
-		}
-
-		int count = 0;
-		
-		// iterate through all permission record keys indexed by claim key in map
-		for (Integer permissionRecordKey : claimIndex.get(claimKey)) {
-
-			// if permission record has matching player key
-			if (permissionMap.get(permissionRecordKey).getPlayerUUID().equals(playerUUID)) {
-				
-				// remove the permission record from the permission map
-				permissionMap.remove(permissionRecordKey);
-
-				// remove the permission record from the claim index
-				claimIndex.get(claimKey).remove(permissionRecordKey);
-				
-				count++;
-			}
-		}
-		if (plugin.debug) {
-			if (count > 0) {
-				plugin.getLogger().info(count + " matching permission record(s) removed from cache.");
-			}
-			else {
-				plugin.getLogger().info("No matching permission record found in cache. "
-						+ "No records removed from cache.");
-			}
-		}
-	}
+//	/**
+//	 * Remove permission record from cache by permission claim key and player uuid
+//	 * @param permissionRecordKey
+//	 */
+//	final void flush(final Integer claimKey, final Integer playerUUID) {
+//
+//		if (claimKey == null) {
+//			if (plugin.debug) {
+//				plugin.getLogger().info("Could not flush permission record from cache because "
+//						+ "claim key is null.");
+//			}
+//			return;
+//		}
+//		if (playerUUID == null) {
+//			if (plugin.debug) {
+//				plugin.getLogger().info("Could not flush permission record from cache because "
+//						+ "player uuid is null.");
+//			}
+//			return;
+//		}
+//
+//		int count = 0;
+//
+//		// iterate through all permission record keys indexed by claim key in map
+//		for (Integer permissionRecordKey : claimIndex.get(claimKey)) {
+//
+//			// if permission record has matching player key
+//			if (permissionMap.get(permissionRecordKey).getPlayerUUID().equals(playerUUID)) {
+//
+//				// remove the permission record from the permission map
+//				permissionMap.remove(permissionRecordKey);
+//
+//				// remove the permission record from the claim index
+//				claimIndex.get(claimKey).remove(permissionRecordKey);
+//
+//				count++;
+//			}
+//		}
+//		if (plugin.debug) {
+//			if (count > 0) {
+//				plugin.getLogger().info(count + " matching permission record(s) removed from cache.");
+//			}
+//			else {
+//				plugin.getLogger().info("No matching permission record found in cache. "
+//						+ "No records removed from cache.");
+//			}
+//		}
+//	}
 	
 	
-	/**
-	 * Get cache size
-	 * @return
-	 */
-	final int getSize() {
-		if (permissionMap == null) {
-			return 0;
-		}
-		return permissionMap.keySet().size();
-	}
+//	/**
+//	 * Get cache size
+//	 * @return integer number of records in map
+//	 */
+//	private int getSize() {
+//		return permissionMap.keySet().size();
+//	}
 
 
 	/**

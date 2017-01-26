@@ -50,6 +50,7 @@ public final class Claim {
 	// constant for admin owner UUID, all zeros
 	private static final UUID zeroUUID = new UUID(0,0);
 
+
 	/**
 	 * Class constructor
 	 */
@@ -61,8 +62,8 @@ public final class Claim {
 
 	/**
 	 * Class constructor
-	 * @param loc1
-	 * @param loc2
+	 * @param loc1 first corner location of claim
+	 * @param loc2 second corner location of claim
 	 */
 	public Claim(final Location loc1, final Location loc2) {
 		
@@ -96,16 +97,13 @@ public final class Claim {
 		this.key = claimKey;
 	}
 
-
 	public final UUID getOwnerUUID() {
 		return ownerUUID;
 	}
 
-
-	public final void setOwnerUUID(final UUID ownerUUID) {
+	final void setOwnerUUID(final UUID ownerUUID) {
 		this.ownerUUID = ownerUUID;
 	}
-
 
 	public final Integer getParentKey() {
 		return parentKey;
@@ -143,55 +141,47 @@ public final class Claim {
 		return locked;
 	}
 
-
-	public final void setLocked(final Boolean locked) {
+	final void setLocked(final Boolean locked) {
 		this.locked = locked;
 	}
-
 
 	public final Boolean isResizeable() {
 		return resizeable;
 	}
 
-
 	public final Boolean getResizeable() {
 		return resizeable;
 	}
-
 
 	public final void setResizeable(final Boolean resizeable) {
 		this.resizeable = resizeable;
 	}
 
-
 	public final Instant getCreatedDate() {
 		return createdDate;
 	}
 
-	public final void setCreatedDate(final Instant instant) {
+	final void setCreatedDate(final Instant instant) {
 		this.createdDate = instant;
 	}
 
-	public final Instant getModifiedDate() {
+	final Instant getModifiedDate() {
 		return modifiedDate;
 	}
 
-	public final void setModifiedDate(final Instant instant) {
+	final void setModifiedDate(final Instant instant) {
 		this.modifiedDate = instant;
 	}
 	
 	public boolean isActive() {
-		if (this.status == null || this.status.equals(ClaimStatus.ACTIVE)) {
-			return true;
-		}
-		return false;
+		return this.status == null || this.status.equals(ClaimStatus.ACTIVE);
 	}
 
-	public final ClaimStatus getStatus() {
-		return status;
-	}
+//	public final ClaimStatus getStatus() {
+//		return status;
+//	}
 
-	public final void setStatus(final ClaimStatus status) {
+	private void setStatus(final ClaimStatus status) {
 		this.status = status;
 	}
 
@@ -199,21 +189,16 @@ public final class Claim {
 	/**
 	 * Check if a claim is an admin claim<br>
 	 * admin claims have a ownerUUID of all zeros; we also test for null
-	 * @return
+	 * @return true if admin claim, false if not
 	 */
 	public final boolean isAdminClaim() {
-		
-		if (this.getOwnerUUID() == null || this.getOwnerUUID().equals(zeroUUID)) {
-			return true;
-		}
-		return false;
+		return this.getOwnerUUID() == null || this.getOwnerUUID().equals(zeroUUID);
 	}
 
 	
 	/**
 	 * Change a claim into an admin claim<br>
 	 * admin claims have a ownerUUID of all zeros
-	 * @return
 	 */
 	public final void setAdminClaim() {
 		this.setOwnerUUID(zeroUUID);
@@ -233,8 +218,8 @@ public final class Claim {
 	
 	/**
 	 * Check if a location is within this claim
-	 * @param location
-	 * @param ignoreHeight
+	 * @param location location to check
+	 * @param ignoreHeight boolean whether to ignore claim height
 	 * @return true if location is within claim, false if location is outside claim
 	 */
 	public final boolean contains(final Location location, final boolean ignoreHeight) {
@@ -255,10 +240,15 @@ public final class Claim {
 	
 	/**
 	 * Test if a claim fully contains another claim
-	 * @param otherClaim
+	 * @param otherClaim claim to test for containment
 	 * @return boolean
 	 */
 	public final boolean contains(final Claim otherClaim) {
+
+		// check if either claim world is null
+		if (this.getWorld() == null || otherClaim.getWorld() == null) {
+			return false;
+		}
 
 		// check if other claim boundaries are within this claim boundaries
 		return (this.getWorld().equals(otherClaim.getWorld())
@@ -271,30 +261,36 @@ public final class Claim {
 	
 	/**
 	 * Test if claim overlaps another claim in two dimensions
-	 * @param otherClaim
+	 * @param otherClaim claim to check for overlap
 	 * @return true if overlap, false if no overlap or claims are in different worlds
 	 */
 	public final boolean overlaps(final Claim otherClaim) {
-		
+
+		// check that both claim worlds are not null
+		if (this.getWorld() == null || otherClaim.getWorld() == null) {
+			return false;
+		}
+
 		// if claims are in different worlds, they don't overlap
+		//noinspection SimplifiableIfStatement
 		if (!this.getWorld().equals(otherClaim.getWorld())) {
 			return false;
 		}
-		
-		return ( !(Math.max(this.getLowerCorner().getBlockX(),this.getUpperCorner().getBlockX()) 
+
+		return ( !(Math.max(this.getLowerCorner().getBlockX(),this.getUpperCorner().getBlockX())
 					< Math.min(otherClaim.getLowerCorner().getBlockX(),otherClaim.getUpperCorner().getBlockX())
-				|| Math.min(this.getLowerCorner().getBlockX(),this.getUpperCorner().getBlockX()) 
+				|| Math.min(this.getLowerCorner().getBlockX(),this.getUpperCorner().getBlockX())
 					> Math.max(otherClaim.getLowerCorner().getBlockX(),otherClaim.getUpperCorner().getBlockX())
-				|| Math.max(this.getLowerCorner().getBlockZ(),this.getUpperCorner().getBlockZ()) 
+				|| Math.max(this.getLowerCorner().getBlockZ(),this.getUpperCorner().getBlockZ())
 					< Math.min(otherClaim.getLowerCorner().getBlockZ(),otherClaim.getUpperCorner().getBlockZ())
-				|| Math.min(this.getLowerCorner().getBlockZ(),this.getUpperCorner().getBlockZ()) 
+				|| Math.min(this.getLowerCorner().getBlockZ(),this.getUpperCorner().getBlockZ())
 					> Math.max(otherClaim.getLowerCorner().getBlockZ(),otherClaim.getUpperCorner().getBlockZ())));
 	}
 	
 
 	/**
 	 * Check if location is a corner of claim
-	 * @param location
+	 * @param location location to test if claim corner
 	 * @return boolean
 	 */
 	public final boolean isCorner(final Location location) {
@@ -359,12 +355,12 @@ public final class Claim {
 	
 	/**
 	 * Create a new claim
-	 * @param loc1
-	 * @param loc2
-	 * @param ownerData
+	 * @param loc1 first corner location of claim
+	 * @param loc2 second corner location of claim
+	 * @param ownerData player state record for claim owner
 	 * @return CreateClaimResult
 	 */
-	public final static ClaimResult create(final Location loc1, final Location loc2, final PlayerState ownerData) {
+	public static ClaimResult create(final Location loc1, final Location loc2, final PlayerState ownerData) {
 	
 		final ClaimResult result = new ClaimResult();
 		
@@ -391,8 +387,11 @@ public final class Claim {
 		
 		// check if claim overlaps any top level claims in world
 		for (Claim testClaim : plugin.dataStore.getAllClaims()) {
-			
-			if (testClaim.getWorld().equals(newClaim.getWorld()) 
+
+			if (testClaim.getWorld() == null || newClaim.getWorld() == null) {
+				result.setSuccess(false);
+			}
+			else if (testClaim.getWorld().equals(newClaim.getWorld())
 					&& !testClaim.isSubClaim()
 					&& newClaim.overlaps(testClaim)) {
 				result.addOverlapClaim(testClaim);
@@ -409,10 +408,10 @@ public final class Claim {
 	 * Create a subclaim inside an existing claim
 	 * @param loc1 first corner selected
 	 * @param loc2 second corner selected
-	 * @param parentClaim
+	 * @param parentClaim claim that subclaim will be child
 	 * @return CreateClaimResult
 	 */
-	public final static ClaimResult createSubClaim(final Location loc1, final Location loc2, final Claim parentClaim) {
+	public static ClaimResult createSubClaim(final Location loc1, final Location loc2, final Claim parentClaim) {
 		
 		// new CreateClaimResult object
 		final ClaimResult result = new ClaimResult();
@@ -462,7 +461,7 @@ public final class Claim {
 	 * Get all claims
 	 * @return Collection of Claims
 	 */
-	public final static Collection<Claim> getAllClaims() {		
+	public static Collection<Claim> getAllClaims() {
 		return plugin.dataStore.getAllClaims();
 	}
 
@@ -517,14 +516,14 @@ public final class Claim {
 	/**
 	 * Extend claim depth along with parent claim and siblings or children<br>
 	 * Note that this method does not check if a player has permission for the claim
-	 * @param depth
+	 * @param depth integer level to extend claim
 	 */
 	public final void extend(final Integer depth) {
 	
 		// create HashSet of claims to extend
-		final HashSet<Claim> extendedClaims = new HashSet<Claim>();
+		final HashSet<Claim> extendedClaims = new HashSet<>();
 	
-		Claim parentClaim = null;
+		Claim parentClaim;
 	
 		// if claim is a subclaim, get parent claim
 		if (this.isSubClaim()) {
@@ -559,7 +558,6 @@ public final class Claim {
 			// update claim in datastore
 			extendedClaim.update();
 		}
-		return;
 	}
 
 	
@@ -589,8 +587,8 @@ public final class Claim {
 			this.update();
 			
 			// add all child claim keys to abandonedKeys HashSet
-			final HashSet<Integer> abandonedKeys = 
-					new HashSet<Integer>(plugin.dataStore.getChildKeys(this.getKey()));
+			final HashSet<Integer> abandonedKeys =
+					new HashSet<>(plugin.dataStore.getChildKeys(this.getKey()));
 			
 			// iterate through all keys in abandonedKeys HashSet
 			for (Integer key : abandonedKeys) {
@@ -614,7 +612,7 @@ public final class Claim {
 	
 	/**
 	 * Transfer claim ownership
-	 * @param newOwnerUUID
+	 * @param newOwnerUUID UUID of player to transfer claim ownership
 	 */
 	public final void transfer(final UUID newOwnerUUID) {
 		
@@ -622,7 +620,7 @@ public final class Claim {
 		this.removeAllPermissions();
 		
 		// initialize HashSet to store parent and all siblings/children
-		final Set<Claim> transferredClaims = new HashSet<Claim>();
+		final Set<Claim> transferredClaims = new HashSet<>();
 		
 		// add all children to HashSet
 		transferredClaims.addAll(plugin.dataStore.getChildClaims(this.getKey()));
@@ -644,8 +642,8 @@ public final class Claim {
 	
 	/**
 	 * Check if player has permission level for claim
-	 * @param playerUUID
-	 * @param permissionLevel
+	 * @param playerUUID UUID of player to check permission level in claim
+	 * @param permissionLevel permission level to check for player in claim
 	 * @return true if player has permission level in claim, false if they do not
 	 */
 	public final boolean allows(final UUID playerUUID, final PermissionLevel permissionLevel) {
@@ -677,8 +675,8 @@ public final class Claim {
 	
 	/**
 	 * Insert or update a permission record
-	 * @param playerUUID
-	 * @param permissionLevel
+	 * @param playerUUID UUID of player for which to set permission in claim
+	 * @param permissionLevel permission level to set for player in claim
 	 */
 	public final void setPermission(final UUID playerUUID, final PermissionLevel permissionLevel) {
 		
@@ -728,53 +726,53 @@ public final class Claim {
 	}
 	
 
-	/**
-	 * Add grant permission for a player in this claim
-	 * @param playerUUID
-	 */
-	public final void addGrant(final UUID playerUUID) {
-		
-		// if claim key is null, do nothing and return
-		if (this.getKey() == null) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Cannot set permission because claim key is null.");
-			}
-			return;
-		}
-		
-		// if player uuid is null, do nothing and return
-		if (playerUUID == null) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Cannot set permission because player uuid is null.");
-			}
-			return;
-		}
-		
-		// get existing record from datastore
-		ClaimPermission claimPermission = plugin.dataStore.getClaimPermission(this.getKey(), playerUUID);
-		
-		// if record does not exists for claim / player, insert new record
-		if (claimPermission == null) {
-
-			// create new record
-			claimPermission = new ClaimPermission(this.getKey(), playerUUID, PermissionLevel.GRANT);
-
-			// insert new record in datastore
-			claimPermission.insert();
-		}
-		else {
-			// set new permission level in existing record
-			claimPermission.addGrant();
-			
-			// update permission record in datastore
-			claimPermission.update();
-		}
-	}
+//	/**
+//	 * Add grant permission for a player in this claim
+//	 * @param playerUUID
+//	 */
+//	public final void addGrant(final UUID playerUUID) {
+//
+//		// if claim key is null, do nothing and return
+//		if (this.getKey() == null) {
+//			if (plugin.debug) {
+//				plugin.getLogger().info("Cannot set permission because claim key is null.");
+//			}
+//			return;
+//		}
+//
+//		// if player uuid is null, do nothing and return
+//		if (playerUUID == null) {
+//			if (plugin.debug) {
+//				plugin.getLogger().info("Cannot set permission because player uuid is null.");
+//			}
+//			return;
+//		}
+//
+//		// get existing record from datastore
+//		ClaimPermission claimPermission = plugin.dataStore.getClaimPermission(this.getKey(), playerUUID);
+//
+//		// if record does not exists for claim / player, insert new record
+//		if (claimPermission == null) {
+//
+//			// create new record
+//			claimPermission = new ClaimPermission(this.getKey(), playerUUID, PermissionLevel.GRANT);
+//
+//			// insert new record in datastore
+//			claimPermission.insert();
+//		}
+//		else {
+//			// set new permission level in existing record
+//			claimPermission.addGrant();
+//
+//			// update permission record in datastore
+//			claimPermission.update();
+//		}
+//	}
 	
 
 	/**
 	 * Remove permission for a player in this claim
-	 * @param playerUUID
+	 * @param playerUUID UUID of player to remove permission from claim
 	 */
 	public final void removePlayerPermission(final UUID playerUUID) {
 		plugin.dataStore.deletePlayerClaimPermission(this.getKey(), playerUUID);
@@ -796,17 +794,17 @@ public final class Claim {
 	public final HashMap<PermissionLevel,ArrayList<String>> getPermissionMap() {
 		
 		// initialize return map
-		final HashMap<PermissionLevel,ArrayList<String>> permissionMap = 
-				new HashMap<PermissionLevel,ArrayList<String>>();
+		final HashMap<PermissionLevel,ArrayList<String>> permissionMap =
+				new HashMap<>();
 	
 		// put all PermissionLevels in hashmap as keys
 		for (PermissionLevel p : PermissionLevel.values()) {
-			permissionMap.put(p,new ArrayList<String>());
+			permissionMap.put(p, new ArrayList<>());
 		}
 
 		// get all permission record keys for claim
-		final HashSet<Integer> claimPermissionRecordKeys = 
-				new HashSet<Integer>(plugin.dataStore.getClaimPermissionKeys(this.getKey()));
+		final HashSet<Integer> claimPermissionRecordKeys =
+				new HashSet<>(plugin.dataStore.getClaimPermissionKeys(this.getKey()));
 
 		// iterate through all permission record keys for claim
 		for (Integer permissionRecordKey : claimPermissionRecordKeys) {
@@ -855,8 +853,8 @@ public final class Claim {
 	
 	/**
 	 * Create a temporary claim for checking overlap/contains during claim resizing
-	 * @param firstClick
-	 * @param secondClick
+	 * @param firstClick location of first tool click
+	 * @param secondClick location of second tool click
 	 * @return the temporary claim with resized coordinates
 	 */
 	public final Claim getResizeCheckClaim(final Location firstClick, final Location secondClick) {

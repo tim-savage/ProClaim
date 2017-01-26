@@ -1,19 +1,18 @@
 package com.winterhaven_mc.proclaim.storage;
 
+import com.winterhaven_mc.proclaim.PluginMain;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
-
-import com.winterhaven_mc.proclaim.PluginMain;
 
 
 public final class DataStoreFactory {
 
 	private final static PluginMain plugin = PluginMain.instance;
 
-	public final static void reload() {
+	public static void reload() {
 		
 		// get current datastore type
 		DataStoreType currentType = plugin.dataStore.getType();
@@ -36,7 +35,7 @@ public final class DataStoreFactory {
 	 * and datastore type should be read from configuration
 	 * @return new datastore of configured type
 	 */
-	public final static DataStore create() {
+	public static DataStore create() {
 		
 		// get data store type from config
 		DataStoreType dataStoreType = DataStoreType.match(plugin.getConfig().getString("storage-type"));
@@ -52,9 +51,9 @@ public final class DataStoreFactory {
 	 * Two parameter version used when a datastore instance already exists
 	 * @param dataStoreType		new datastore type
 	 * @param oldDataStore		existing datastore reference
-	 * @return
+	 * @return new datastore
 	 */
-	private final static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
+	private static DataStore create(final DataStoreType dataStoreType, final DataStore oldDataStore) {
 	
 		// get new data store of specified type
 		DataStore newDataStore = dataStoreType.create();
@@ -63,7 +62,8 @@ public final class DataStoreFactory {
 		try {
 			newDataStore.initialize();
 		} catch (Exception e) {
-			plugin.getLogger().severe("Could not initialize " + newDataStore.getDisplayName() + " datastore!");
+			plugin.getLogger().severe("Could not initialize "
+					+ newDataStore.getDisplayName() + " datastore!");
 			if (plugin.debug) {
 				e.printStackTrace();
 			}
@@ -83,10 +83,10 @@ public final class DataStoreFactory {
 
 	/**
 	 * convert old data store to new data store
-	 * @param oldDataStore
-	 * @param newDataStore
+	 * @param oldDataStore data store to convert from
+	 * @param newDataStore data store to convert to
 	 */
-	private final static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
+	private static void convertDataStore(final DataStore oldDataStore, final DataStore newDataStore) {
 
 		// if datastores are same type, do not convert
 		if (oldDataStore.getType().equals(newDataStore.getType())) {
@@ -112,9 +112,7 @@ public final class DataStoreFactory {
 			}
 			
 			// convert player records
-			Set<PlayerState> allPlayerRecords = new HashSet<PlayerState>();
-			
-			allPlayerRecords = oldDataStore.getAllPlayerRecords();
+			Set<PlayerState> allPlayerRecords = oldDataStore.getAllPlayerRecords();
 			
 			int count = 0;
 			for (PlayerState record : allPlayerRecords) {
@@ -124,9 +122,7 @@ public final class DataStoreFactory {
 			plugin.getLogger().info(count + " player records converted to " + newDataStore.toString() + " datastore.");
 			
 			// convert claim records
-			Collection<Claim> allClaimRecords = new HashSet<Claim>();
-			
-			allClaimRecords = oldDataStore.getAllClaims();
+			Collection<Claim> allClaimRecords = oldDataStore.getAllClaims();
 			count = 0;
 			for (Claim record : allClaimRecords) {
 				newDataStore.insertClaimBlocking(record);
@@ -135,9 +131,7 @@ public final class DataStoreFactory {
 			plugin.getLogger().info(count + " claim records converted to " + newDataStore.toString() + " datastore.");
 			
 			// convert claim group records
-			Collection<ClaimGroup> allClaimGroupRecords = new HashSet<ClaimGroup>();
-			
-			allClaimGroupRecords = oldDataStore.getAllClaimGroups();
+			Collection<ClaimGroup> allClaimGroupRecords = oldDataStore.getAllClaimGroups();
 			count = 0;
 			for (ClaimGroup record : allClaimGroupRecords) {
 				newDataStore.insertClaimGroupBlocking(record);
@@ -146,9 +140,7 @@ public final class DataStoreFactory {
 			plugin.getLogger().info(count + " claim group records converted to " + newDataStore.toString() + " datastore.");
 			
 			// convert permissions records
-			Collection<ClaimPermission> allPermissionRecords = new HashSet<ClaimPermission>();
-
-			allPermissionRecords = oldDataStore.getAllClaimPermissions();
+			Collection<ClaimPermission> allPermissionRecords = oldDataStore.getAllClaimPermissions();
 			count = 0;
 			for (ClaimPermission record : allPermissionRecords) {
 				newDataStore.insertClaimPermissionBlocking(record);
@@ -163,12 +155,12 @@ public final class DataStoreFactory {
 	
 	/**
 	 * convert all existing data stores to new data store
-	 * @param newDataStore
+	 * @param newDataStore data store object to convert existing data stores into
 	 */
-	private final static void convertAll(final DataStore newDataStore) {
+	private static void convertAll(final DataStore newDataStore) {
 		
 		// get array list of all data store types
-		ArrayList<DataStoreType> dataStoresTypes = new ArrayList<DataStoreType>(Arrays.asList(DataStoreType.values()));
+		ArrayList<DataStoreType> dataStoresTypes = new ArrayList<>(Arrays.asList(DataStoreType.values()));
 		
 		// remove newDataStore from list of types to convert
 		dataStoresTypes.remove(newDataStore.getType());

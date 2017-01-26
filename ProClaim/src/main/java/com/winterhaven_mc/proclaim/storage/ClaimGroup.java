@@ -23,7 +23,7 @@ public final class ClaimGroup {
 	
 	/**
 	 * Class constructor
-	 * @param groupName
+	 * @param groupName string name for new ClaimGroup object
 	 */
 	public ClaimGroup(final String groupName) {
 		
@@ -36,8 +36,8 @@ public final class ClaimGroup {
 	
 	/**
 	 * Class constructor
-	 * @param groupName
-	 * @param limit
+	 * @param groupName string name for new ClaimGroup object
+	 * @param limit integer max number of claims a player may own in this group
 	 */
 	public ClaimGroup(final String groupName, final Integer limit) {
 		
@@ -96,19 +96,19 @@ public final class ClaimGroup {
 
 	/**
 	 * Get a claim group from the datastore by claim group key
-	 * @param claimGroupKey
-	 * @return
+	 * @param claimGroupKey integer key for ClaimGroup record to be retrieved
+	 * @return claim group with matching key, or null if no matching claim group found
 	 */
-	public final static ClaimGroup getClaimGroup(final Integer claimGroupKey) {
+	public static ClaimGroup getClaimGroup(final Integer claimGroupKey) {
 		return plugin.dataStore.getClaimGroup(claimGroupKey);
 	}
 	
 	/**
 	 * Get a claim group from the datastore by claim group name
-	 * @param claimGroupName
+	 * @param claimGroupName string name of ClaimGroup to be retrived
 	 * @return claim group with matching name, or null if no matching claim group found
 	 */
-	public final static ClaimGroup getClaimGroup(final String claimGroupName) {
+	public static ClaimGroup getClaimGroup(final String claimGroupName) {
 		return plugin.dataStore.getClaimGroup(claimGroupName);
 	}
 	
@@ -116,11 +116,11 @@ public final class ClaimGroup {
 	 * Get all claim groups from the datastore
 	 * @return unmodifiable set of all claim groups, or empty set if no claim groups exist
 	 */
-	public final static Set<ClaimGroup> getAllClaimGroups() {
+	public static Set<ClaimGroup> getAllClaimGroups() {
 		return plugin.dataStore.getAllClaimGroups();
 	}
 
-	public final static int getPlayerClaimGroupCount(final ClaimGroup claimGroup, final UUID playerUUID) {
+	public static int getPlayerClaimGroupCount(final ClaimGroup claimGroup, final UUID playerUUID) {
 		return plugin.dataStore.getPlayerClaimGroupCount(claimGroup, playerUUID);
 	}
 }

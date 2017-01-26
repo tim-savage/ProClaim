@@ -19,7 +19,7 @@ final class Queries {
 		throw new AssertionError();
 	}
 	
-	private final static Properties getQueries() throws SQLException {
+	private static Properties getQueries() throws SQLException {
 		
 		// singleton
 		if (properties == null) {
@@ -41,7 +41,7 @@ final class Queries {
 		return properties;
 	}
 
-	final static String getQuery(final String query) throws SQLException {
+	static String getQuery(final String query) throws SQLException {
 		return getQueries().getProperty(query);
 	}
 	

@@ -12,15 +12,16 @@ import com.winterhaven_mc.proclaim.storage.Claim;
 public final class WorldGuardHelper {
 
 	// reference to main class
+	@SuppressWarnings("FieldCanBeLocal")
 	private final PluginMain plugin;
-	
+
 	private boolean worldGuardPresent;
 
 	private WorldGuardWrapper worldGuardWrapper;
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to plugin main class
 	 */
 	public WorldGuardHelper(final PluginMain plugin) {
 		
@@ -55,25 +56,18 @@ public final class WorldGuardHelper {
 		return this.worldGuardPresent;
 	}
 	
+	@SuppressWarnings("unused")
 	public final boolean canBuild(final Player player, final Location location) {
-		
-		if (worldGuardPresent) {
-			return worldGuardWrapper.canBuild(player, location);
-		}
-		return true;
+		return !worldGuardPresent || worldGuardWrapper.canBuild(player, location);
 	}
 	
 	public final boolean canBuild(final Player player, final Block block) {
-		
-		if (worldGuardPresent) {
-			return worldGuardWrapper.canBuild(player, block);
-		}
-		return true;
+		return !worldGuardPresent || worldGuardWrapper.canBuild(player, block);
 	}
 	
 	/**
 	 * Create WorldGuard region for claim
-	 * @param claim
+	 * @param claim claim to create WorldGuard region
 	 */
 	public final void createRegion(final Claim claim) {
 
@@ -85,7 +79,7 @@ public final class WorldGuardHelper {
 	
 	/**
 	 * Synchronize WorldGuard region for claim
-	 * @param claim
+	 * @param claim claim to synchronize WorldGuard region
 	 */
 	public final void syncRegion(final Claim claim) {
 
@@ -97,14 +91,14 @@ public final class WorldGuardHelper {
 	
 	/**
 	 * Remove WorldGuard region for claim
-	 * @param claim
+	 * @param claim claim to remove WorldGuard region
 	 */
 	public final void removeRegion(final Claim claim) {
 		
 		if (worldGuardPresent) {
 			
 			// get new HashSet of child claims
-			HashSet<Claim> removedClaims = new HashSet<Claim>(claim.getChildClaims());
+			HashSet<Claim> removedClaims = new HashSet<>(claim.getChildClaims());
 			
 			// add this claim to HashSet
 			removedClaims.add(claim);
@@ -118,12 +112,6 @@ public final class WorldGuardHelper {
 	
 	
 	public final boolean overlaps(final Claim claim, final Player player) {
-		
-		if (worldGuardPresent) {
-			return worldGuardWrapper.overlaps(claim, player);
-		}
-		else {
-			return false;
-		}
+		return worldGuardPresent && worldGuardWrapper.overlaps(claim, player);
 	}
 }

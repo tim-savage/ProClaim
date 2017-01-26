@@ -1,12 +1,10 @@
 package com.winterhaven_mc.proclaim.storage;
 
+import com.winterhaven_mc.proclaim.PluginMain;
+
 import java.time.Instant;
-import java.util.Collections;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.winterhaven_mc.proclaim.PluginMain;
 
 final class PlayerStateCache {
 	
@@ -17,7 +15,7 @@ final class PlayerStateCache {
 	private final ConcurrentHashMap<UUID, CachedPlayerState> playerStateMap;
 	
 	// cache lookup table for playerName
-	private final ConcurrentHashMap<String, UUID> playerNameIndex;
+//	private final ConcurrentHashMap<String, UUID> playerNameIndex;
 	
 
 	/**
@@ -60,7 +58,7 @@ final class PlayerStateCache {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to plugin main class
 	 */
 	PlayerStateCache(final PluginMain plugin) {
 		
@@ -68,16 +66,16 @@ final class PlayerStateCache {
 		this.plugin = plugin;
 		
 		// instantiate player state map
-		playerStateMap = new ConcurrentHashMap<UUID, CachedPlayerState>();
+		playerStateMap = new ConcurrentHashMap<>();
 		
 		// instantiate player name index
-		playerNameIndex = new ConcurrentHashMap<String, UUID>();
+//		playerNameIndex = new ConcurrentHashMap<>();
 	}
 	
 	
 	/**
 	 * Retrieve player state from the cache by player UUID
-	 * @param playerUUID
+	 * @param playerUUID UUID of player to retrieve from cache
 	 * @return PlayerState object or null if not found in cache
 	 */
 	final PlayerState fetch(final UUID playerUUID) {
@@ -99,57 +97,60 @@ final class PlayerStateCache {
 	}
 	
 	
-	/**
-	 * Retrieve player state from the cache by playerName
-	 * @param playerName
-	 * @return PlayerState object or null if not found in cache
-	 */
-	final PlayerState fetch(final String playerName) {
-		
-		if (playerName == null || playerName.isEmpty()) {
-			if (plugin.debug) {
-				plugin.getLogger().info("PlayerStateCache was passed a null or empty name for lookup.");
-			}
-			return null;
-		}
-
-		final UUID playerUUID = playerNameIndex.get(playerName);
-		
-		if (playerUUID == null) {
-			return null;
-		}
-		
-		final CachedPlayerState cachedPlayerState = playerStateMap.get(playerUUID);
-		
-		if (cachedPlayerState != null && cachedPlayerState.getPlayerState() != null) {
-			cachedPlayerState.setLastCacheHit();
-			return cachedPlayerState.getPlayerState();
-		}
-		return null;
-	}
+//	/**
+//	 * Retrieve player state from the cache by playerName
+//	 * @param playerName
+//	 * @return PlayerState object or null if not found in cache
+//	 */
+//	final PlayerState fetch(final String playerName) {
+//
+//		if (playerName == null || playerName.isEmpty()) {
+//			if (plugin.debug) {
+//				plugin.getLogger().info("PlayerStateCache was passed a null or empty name for lookup.");
+//			}
+//			return null;
+//		}
+//
+//		final UUID playerUUID = playerNameIndex.get(playerName);
+//
+//		if (playerUUID == null) {
+//			return null;
+//		}
+//
+//		final CachedPlayerState cachedPlayerState = playerStateMap.get(playerUUID);
+//
+//		if (cachedPlayerState != null && cachedPlayerState.getPlayerState() != null) {
+//			cachedPlayerState.setLastCacheHit();
+//			return cachedPlayerState.getPlayerState();
+//		}
+//		return null;
+//	}
 	
 	
-	/**
-	 * Retrieve player state from the cache by playerName
-	 * without updating last cache hit
-	 * @param playerName
-	 * @return PlayerData
-	 */
-	final PlayerState peek(final String playerName) {
-		
-		CachedPlayerState cachedPlayerState = null;
-		final UUID playerUUID = playerNameIndex.get(playerName);
-
-		if (playerUUID != null) {
-			cachedPlayerState = playerStateMap.get(playerUUID);
-		}
-		return cachedPlayerState.getPlayerState();
-	}
+//	/**
+//	 * Retrieve player state from the cache by playerName
+//	 * without updating last cache hit
+//	 * @param playerName player name to retrieve from cache
+//	 * @return PlayerData
+//	 */
+//	final PlayerState peek(final String playerName) {
+//
+//		CachedPlayerState cachedPlayerState = null;
+//		final UUID playerUUID = playerNameIndex.get(playerName);
+//
+//		if (playerUUID != null) {
+//			cachedPlayerState = playerStateMap.get(playerUUID);
+//		}
+//		if (cachedPlayerState != null) {
+//			return cachedPlayerState.getPlayerState();
+//		}
+//		return null;
+//	}
 	
 	
 	/**
 	 * Store player state in the cache
-	 * @param playerState
+	 * @param playerState player state record to store in cache
 	 */
 	final void store(final PlayerState playerState) {
 
@@ -180,7 +181,7 @@ final class PlayerStateCache {
 			if (plugin.debug) {
 				plugin.getLogger().warning("Attempted to insert null or blank player name in the cache index.");
 			}
-			return;
+//			return;
 		}
 		
 		// not removing name index entries on update. if a player changes their name within the cache lifetime,
@@ -189,70 +190,72 @@ final class PlayerStateCache {
 		// this is acceptable cache behavior. if unforeseen issues arise, it will be changed.
 		
 		// put player name in index
-		playerNameIndex.put(playerName, playerState.getPlayerUUID());
+//		playerNameIndex.put(playerName, playerState.getPlayerUUID());
 	}
 
 
 	/**
 	 * Remove cached player state from memory by player UUID<br>
 	 * remove playerName index mappings too
-	 * @param playerUUID
+	 * @param playerUUID UUID of player record to remove from cache
 	 */
 	final void flush(final UUID playerUUID) {
 		
 		// get playerName
-		final String playerName = playerStateMap.get(playerUUID).getName();
+//		final String playerName = playerStateMap.get(playerUUID).getName();
 		
 		// remove entry from cache map
 		playerStateMap.remove(playerUUID);
 		
 		// remove entry from name index map
-		playerNameIndex.remove(playerName);
+//		if (playerName != null) {
+//			playerNameIndex.remove(playerName);
+//		}
 	}
 
 	
-	/**
-	 * Remove player state from cache by player name<br>
-	 * remove playerName index mappings too
-	 * @param playerName
-	 */
-	final void flush(final String playerName) {
-		
-		// get playerUUID
-		final UUID playerUUID = playerNameIndex.get(playerName);
-		
-		// remove entry from cache map
-		playerStateMap.remove(playerUUID);
-		
-		// remove entry from name index map
-		playerNameIndex.remove(playerName);
-	}
+//	/**
+//	 * Remove player state from cache by player name<br>
+//	 * remove playerName index mappings too
+//	 * @param playerName player name to remove from cache
+//	 */
+//	final void flush(final String playerName) {
+//
+//		// get playerUUID
+//		final UUID playerUUID = playerNameIndex.get(playerName);
+//
+//		// remove entry from cache map
+//		playerStateMap.remove(playerUUID);
+//
+//		// remove entry from name index map
+//		playerNameIndex.remove(playerName);
+//	}
 
 	
 	/**
 	 * Get number of cache map entries
-	 * @return
+	 * @return integer number of entries in cache
 	 */
 	final int getSize() {
 		return playerStateMap.keySet().size();
 	}
 	
 
-	/**
-	 * Get cache map keys
-	 * @return
-	 */
-	final Set<UUID> getCacheMapKeys() {
-		return Collections.unmodifiableSet(playerStateMap.keySet());
-	}
+//	/**
+//	 * Get cache map keys
+//	 * @return
+//	 */
+//	final Set<UUID> getCacheMapKeys() {
+//		return Collections.unmodifiableSet(playerStateMap.keySet());
+//	}
 
 	
-	/**
-	 * Get name index keys
-	 * @return
-	 */
-	final Set<String> getPlayerNameIndexKeys() {
-		return Collections.unmodifiableSet(playerNameIndex.keySet());
-	}
+//	/**
+//	 * Get name index keys
+//	 * @return
+//	 */
+//	final Set<String> getPlayerNameIndexKeys() {
+//		return Collections.unmodifiableSet(playerNameIndex.keySet());
+//	}
 	
 }

@@ -1441,6 +1441,7 @@ public enum ClaimTool {
 	private Material currentMaterial;
 
 	// config prefix string for tool materials
+	@SuppressWarnings("FieldCanBeLocal")
 	private final String configPrefix = "tool-material-";
 
 	private String toolName;
@@ -1448,16 +1449,16 @@ public enum ClaimTool {
 	private List<String> toolLore;
 
 	public static final Set<Material> toolTransparentMaterials = 
-			Collections.unmodifiableSet(new HashSet<Material>(Arrays.asList(
+			Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
 					Material.AIR,
 					Material.SNOW,
 					Material.LONG_GRASS
-				)));
+			)));
 
 
 	/**
 	 * Class constructor
-	 * @param defaultMaterial
+	 * @param defaultMaterial material to be used for tool
 	 */
 	ClaimTool(final Material defaultMaterial) {
 		this.defaultMaterial = defaultMaterial;
@@ -1613,27 +1614,27 @@ public enum ClaimTool {
 
 	/**
 	 * Method executed when a player uses a tool with no current working claim set
-	 * @param player
-	 * @param clickedBlock
+	 * @param player who generated event by tool use
+	 * @param clickedBlock block that tool was used on
 	 */
 	abstract public void onFirstClick(final Player player, final Block clickedBlock);
 
 	/**
 	 * Method executed when a player uses a tool with a current working claim set
-	 * @param player
-	 * @param clickedBlock
+	 * @param player who generated event by tool use
+	 * @param clickedBlock block that tool was used on
 	 */
 	abstract public void onSecondClick(final Player player, final Block clickedBlock);
 	
 	/**
 	 * Method executed when a player equips a tool, by command or action
-	 * @param player
+	 * @param player who equiped tool
 	 */
 	abstract public void onEquip(final Player player);
 
 	/**
 	 * Method executed when a player switches away from a tool in inventory
-	 * @param player
+	 * @param player who switched from tool
 	 */
 	abstract public void onUnequip(final Player player);
 
@@ -1688,7 +1689,7 @@ public enum ClaimTool {
 
 	/**
  	 * changes all claim tools in player inventory to this type
-	 * @param player
+	 * @param player player to change tool type in inventory
 	 */
 	public final void changeInventoryTool(final Player player) {
 		
@@ -1708,8 +1709,9 @@ public enum ClaimTool {
 				
 				// if tools match, no swap necessary
 				// TODO: FIX THIS
-				if (!playerInventory.getItem(i).equals(this)) {
-					playerInventory.setItem(i, ClaimTool.create(this));
+				ItemStack newTool = ClaimTool.create(this);
+				if (!newTool.equals(playerInventory.getItem(i))) {
+					playerInventory.setItem(i, newTool);
 				}
 			}
 		}
@@ -1717,8 +1719,8 @@ public enum ClaimTool {
 	
 	/**
  	 * Static version of method, changes all claim tools in player inventory to specified type
-	 * @param player
-	 * @param claimTool
+	 * @param player player to change tool type in inventory
+	 * @param claimTool tool to change player inventory tools to
 	 */
 	public static void changeInventoryTool(final Player player, final ClaimTool claimTool) {
 		
@@ -1737,9 +1739,9 @@ public enum ClaimTool {
 			if(playerInventory.getItem(i) != null && ClaimTool.isTool(playerInventory.getItem(i))) {
 				
 				// if tools match, no swap necessary
-				//TODO: FIX THIS
-				if (!claimTool.equals(playerInventory.getItem(i))) {
-					playerInventory.setItem(i, ClaimTool.create(claimTool));
+				ItemStack newTool = ClaimTool.create(claimTool);
+				if (!newTool.equals(playerInventory.getItem(i))) {
+					playerInventory.setItem(i, newTool);
 				}
 			}
 		}

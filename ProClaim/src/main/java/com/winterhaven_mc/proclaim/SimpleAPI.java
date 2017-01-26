@@ -21,8 +21,8 @@ public class SimpleAPI {
 	
 	/**
 	 * Check if a player has access trust at a given location
-	 * @param player
-	 * @param location
+	 * @param player player to check for access trust in claim
+	 * @param location location to check for claim with player access trust
 	 * @return true if player has access trust at location or no claim exists at location;
 	 * false if a claim exists at location and player does not have access trust
 	 */
@@ -47,8 +47,8 @@ public class SimpleAPI {
 	
 	/**
 	 * Check if a player has container trust at a given location
-	 * @param player
-	 * @param location
+	 * @param player player to check for container trust
+	 * @param location location to check for claim with player container trust
 	 * @return true if player has container trust at location or no claim exists at location;
 	 * false if a claim exists at location and player does not have container trust
 	 */
@@ -73,8 +73,8 @@ public class SimpleAPI {
 	
 	/**
 	 * Check if a player has build trust at a given location
-	 * @param player
-	 * @param location
+	 * @param player player to check for build trust
+	 * @param location location to check for claim with player build trust
 	 * @return true if player has build trust at location or no claim exists at location;
 	 * false if a claim exists at location and player does not have build trust
 	 */
@@ -99,8 +99,8 @@ public class SimpleAPI {
 	
 	/**
 	 * Check if a player has grant trust at a given location
-	 * @param player
-	 * @param location
+	 * @param player player to check for grant trust
+	 * @param location location of claim to check if player has grant trust
 	 * @return true if player has grant trust at location or no claim exists at location;
 	 * false if a claim exists at location and player does not have grant trust
 	 */
@@ -125,7 +125,7 @@ public class SimpleAPI {
 	
 	/**
 	 * Get the player UUID for the owner of a claim at a given location 
-	 * @param location
+	 * @param location location to check for claim ownership
 	 * @return player UUID for owner of a claim. If no claim exists at location, returns null.
 	 * If claim is an admin (server owned) claim, UUID will be all zeros.
 	 * An all zero UUID can be created for comparison by using the 

@@ -8,17 +8,19 @@ import java.util.UUID;
 
 public abstract class DataStore {
 
+	@SuppressWarnings("WeakerAccess")
 	protected boolean initialized;
 	
 	protected DataStoreType type;
 
+	@SuppressWarnings("WeakerAccess")
 	protected String filename;
 
 	final static UUID zeroUUID = new UUID(0,0);
 	
 	/**
 	 * Initialize storage
-	 * @throws Exception
+	 * @throws Exception if datastore can not be initialized
 	 */
 	abstract void initialize() throws Exception;
 	
@@ -30,34 +32,33 @@ public abstract class DataStore {
 
 	/**
 	 * Get player record by player UUID
-	 * @param playerUUID
+	 * @param playerUUID UUID of player to retrieve state
 	 * @return PlayerState object or null if no matching record
 	 */
 	abstract PlayerState getPlayerState(final UUID playerUUID);
 	
 	/**
 	 * Get player records by player name
-	 * @param playerName
+	 * @param playerName string name of player to retrieve records
 	 * @return Set of PlayerState objects; empty if no results found
 	 */
 	abstract Set<PlayerState> getPlayerRecords(final String playerName);
 	
 	/**
 	 * Insert new player record
-	 * @param playerState
-	 * @return 
+	 * @param playerState player state object to insert in datastore
 	 */
 	abstract void insertPlayerStateBlocking(final PlayerState playerState);
 
 	/**
 	 * Insert new player record asynchronously
-	 * @param playerState
+	 * @param playerState player state object to insert in datastore
 	 */
 	abstract void insertPlayerState(final PlayerState playerState);
 
 	/**
 	 * Update player record
-	 * @param playerState
+	 * @param playerState player state object to update in datastore
 	 */
 	abstract void updatePlayerState(final PlayerState playerState);
 
@@ -75,7 +76,7 @@ public abstract class DataStore {
 
 	/**
 	 * get claim by location
-	 * @param location
+	 * @param location to retrieve claim from datastore
 	 * @return subclaim at location if one exists;
 	 *  else top level claim at location;
 	 *  else null if no claim exists at location
@@ -84,8 +85,8 @@ public abstract class DataStore {
 
 	/**
 	 * get claim by location
-	 * @param location
-	 * @param ignoreHeight
+	 * @param location location to retrieve from datastore
+	 * @param ignoreHeight if true ignore vertical axis when searching for claim in datastore
 	 * @return subclaim at location if one exists;
 	 *  else top level claim at location;
 	 *  else null if no claim exists at location
@@ -100,55 +101,53 @@ public abstract class DataStore {
 
 	/**
 	 * Get claims by owner UUID
-	 * @param ownerUUID
+	 * @param ownerUUID UUID of player owner of claims to retrieve from datastore
 	 * @return Immutable Set of claims; empty HashSet if no records found
 	 */
 	public abstract Set<Claim> getPlayerClaims(final UUID ownerUUID);
 	
 	/**
 	 * Get child claim records for claim by key
-	 * @param claimKey
+	 * @param claimKey integer key of claim to retrieve child claims
 	 * @return Immutable Set of child claims; empty HashSet if no records found
 	 */
 	public abstract Set<Claim> getChildClaims(final Integer claimKey);
 
 	/**
 	 * Get child claim keys for claim by claim key
-	 * @param claimKey
+	 * @param claimKey integer key of claim to retrieve child claim keys
 	 * @return Immutable Set of keys; empty HashSet if no records found
 	 */
 	abstract Set<Integer> getChildKeys(final Integer claimKey);
 	
 	/**
 	 * insert new claim record synchronously
-	 * @param claim
+	 * @param claim claim object to create record in datastore
 	 */
 	abstract void insertClaimBlocking(final Claim claim);
 
 	/**
 	 * insert new claim record asynchronously
-	 * @param claim
-	 * @return
+	 * @param claim claim object to create record in datastore
 	 */
 	abstract void insertClaim(final Claim claim);
 
 	/**
 	 * update existing claim record
-	 * @param claim
+	 * @param claim claim object to update in datastore
 	 */
 	abstract void updateClaim(final Claim claim);
 	
 	/**
 	 * delete claim record
-	 * @param claimKey
-	 * @return Claim deleted claim object
+	 * @param claimKey integer key for claim to delete from datastore
 	 */
 	abstract void deleteClaim(final Integer claimKey);
 
 	/**
 	 * Get claim permission for player by claim key and player uuid
-	 * @param claimKey
-	 * @param playerUUID
+	 * @param claimKey integer key of claim to use as search parameter for claim permission
+	 * @param playerUUID UUID of player to use as search parameter for claim permission
 	 * @return ClaimPermission or null if no permission found
 	 */
 	abstract ClaimPermission getClaimPermission(final Integer claimKey, final UUID playerUUID);
@@ -163,14 +162,14 @@ public abstract class DataStore {
 
 	/**
 	 * Get claim permission by permission record key
-	 * @param permissionRecordKey
+	 * @param permissionRecordKey integer key of permission record to retrieve from datastore
 	 * @return ClaimPermission or null if no permission found
 	 */
 	abstract ClaimPermission getClaimPermission(final Integer permissionRecordKey);
 	
 	/**
 	 * Get claim permission keys by claim key
-	 * @param claimKey
+	 * @param claimKey integer key of claim to retrieve permissions from datastore
 	 * @return Set of claim permission keys or empty Set if no permissions for claim found
 	 */
 	abstract Set<Integer> getClaimPermissionKeys(final Integer claimKey);
@@ -183,46 +182,46 @@ public abstract class DataStore {
 	
 	/**
 	 * Insert new permission record
-	 * @param claimPermission
+	 * @param claimPermission claim permission object to create in datastore
 	 */
 	abstract void insertClaimPermissionBlocking(final ClaimPermission claimPermission);
 
 	/**
 	 * Insert new permission record asynchronously
-	 * @param claimPermission
+	 * @param claimPermission claim permisssion object to create in datastore
 	 */
 	abstract void insertClaimPermission(final ClaimPermission claimPermission);
 	
 	/**
 	 * Update existing permission record
-	 * @param claimPermission
+	 * @param claimPermission claim permission object to update in datastore
 	 */
 	abstract void updateClaimPermission(final ClaimPermission claimPermission);
 
 	/**
 	 * Delete all claim permissions by claimKey
-	 * @param claimKey
+	 * @param claimKey integer key of claim to match for deleting all claim permissions
 	 */
 	abstract void deleteAllClaimPermissions(final Integer claimKey);
 	
 	/**
 	 * Delete player claim permissions by claimKey, playerKey
-	 * @param claimKey
-	 * @param playerUUID
+	 * @param claimKey integer key of claim to match for deleting permissions
+	 * @param playerUUID UUID of player to match for deleting permissions
 	 */
 	abstract void deletePlayerClaimPermission(final Integer claimKey, final UUID playerUUID);
 		
 	/**
 	 * Get claim group by name
-	 * @param claimGroupName
-	 * @return
+	 * @param claimGroupName string name of claim group to retrieve from datastore
+	 * @return claim group object
 	 */
 	abstract ClaimGroup getClaimGroup(final String claimGroupName);
 
 	/**
 	 * Get claim group by claimGroupKey
-	 * @param claimGroupKey
-	 * @return
+	 * @param claimGroupKey integer key of claim group to retrieve from datastore
+	 * @return claim group object
 	 */
 	abstract ClaimGroup getClaimGroup(final Integer claimGroupKey);
 
@@ -234,33 +233,33 @@ public abstract class DataStore {
 
 	/**
 	 * Get number of claims in group owned by player, by playerUUID
-	 * @param claimGroup
-	 * @param playerUUID
+	 * @param claimGroup claim group object to use as search parameter for claims
+	 * @param playerUUID UUID of player to use as search parameter for claims
 	 * @return int number of claims owned by player in claim group
 	 */
 	abstract int getPlayerClaimGroupCount(final ClaimGroup claimGroup, final UUID playerUUID);
 	
 	/**
 	 * Insert new claim group record
-	 * @param claimGroup
+	 * @param claimGroup claim group object to insert in datastore
 	 */
 	abstract void insertClaimGroupBlocking(final ClaimGroup claimGroup);
 
 	/**
 	 * Insert new claim group record asynchronously
-	 * @param claimGroup
+	 * @param claimGroup claim group object to insert in datastore
 	 */
 	abstract void insertClaimGroup(final ClaimGroup claimGroup);
 
 	/**
 	 * Update existing claim group record
-	 * @param claimGroup
+	 * @param claimGroup claim group object to update in datastore
 	 */
 	abstract void updateClaimGroup(final ClaimGroup claimGroup);
 
 	/**
 	 * Delete claim group record
-	 * @param claimGroupKey
+	 * @param claimGroupKey integer key of claim group record to retrieve from datastore
 	 */
 	abstract void deleteClaimGroup(final Integer claimGroupKey);
 	
@@ -319,7 +318,7 @@ public abstract class DataStore {
 	
 	/**
 	 * Set initialized field
-	 * @param initialized
+	 * @param initialized boolean true if datastore has been initialized, else false
 	 */
 	void setInitialized(final boolean initialized) {
 		this.initialized = initialized;

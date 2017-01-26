@@ -67,10 +67,6 @@ public final class EconomyManager {
 	}
 
 
-	public final boolean isVaultPresent() {
-		return this.vaultPresent;
-	}
-
 	public final boolean isEconomyRegistered() {
 		return economy != null;
 	}
