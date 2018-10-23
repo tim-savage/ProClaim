@@ -1,21 +1,25 @@
-package com.winterhaven_mc.proclaim.util;
+package com.winterhaven_mc.proclaim.messages;
 
 import com.winterhaven_mc.proclaim.PluginMain;
 import com.winterhaven_mc.proclaim.objects.ClaimTool;
 import com.winterhaven_mc.proclaim.storage.Claim;
 import com.winterhaven_mc.proclaim.storage.ClaimGroup;
 import com.winterhaven_mc.proclaim.storage.PlayerState;
-import com.winterhaven_mc.util.ConfigAccessor;
-import com.winterhaven_mc.util.LanguageManager;
+
 import com.winterhaven_mc.util.StringUtil;
+import com.winterhaven_mc.util.LanguageManager;
+import com.winterhaven_mc.util.YamlLanguageManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,14 +37,14 @@ public final class MessageManager {
 	// reference to main class
 	private final PluginMain plugin;
 
+	// message cooldown hashmap
+	private final ConcurrentHashMap<UUID, EnumMap<MessageId,Long>> messageCooldownMap;
+
 	// language manager
 	private LanguageManager languageManager;
 
-	// custom configuration for messages
-	private ConfigAccessor messages;
-
-	// message cooldown hashmap
-	private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
+	// configuration file manager for messages
+	private Configuration messages;
 
 
 	/**
@@ -53,14 +57,14 @@ public final class MessageManager {
 		// set reference to main class
 		this.plugin = plugin;
 
-		// instantiate language manager
-		languageManager = new LanguageManager(plugin);
-
-		// instantiate messages configuration handler
-		this.messages = new ConfigAccessor(plugin,languageManager.getFileName());
-
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<>();
+
+		// instantiate language manager
+		languageManager = new YamlLanguageManager(plugin);
+
+		// load messages from file
+		this.messages = languageManager.loadMessages();
 	}
 
 
@@ -70,7 +74,7 @@ public final class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId) {
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId) {
 		this.sendPlayerMessage(sender, messageId, null, null);
 	}
 
@@ -81,7 +85,7 @@ public final class MessageManager {
 	 * @param messageId message identifier
 	 * @param claim the claim whose parameters may be used in the message
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final Claim claim) {
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId, final Claim claim) {
 		this.sendPlayerMessage(sender, messageId, claim, null);
 	}
 
@@ -92,7 +96,7 @@ public final class MessageManager {
 	 * @param messageId message identifier
 	 * @param targetPlayerUUID uuid of the target player to be used in the message
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final UUID targetPlayerUUID) {
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId, final UUID targetPlayerUUID) {
 		this.sendPlayerMessage(sender, messageId, null, targetPlayerUUID);
 	}
 
@@ -104,11 +108,11 @@ public final class MessageManager {
 	 * @param claim the claim whose parameters may be used in the message
 	 * @param targetPlayerUUID uuid of the target player to be used in the message
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId,
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId,
 			final Claim claim, final UUID targetPlayerUUID) {
 
 		// if message is not enabled in messages file, do nothing and return
-		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
+		if (!messages.getBoolean("messages." + messageId + ".enabled")) {
 			return;
 		}
 
@@ -134,10 +138,10 @@ public final class MessageManager {
 			Player player = (Player) sender;
 
 			// get message cooldown time remaining
-			Long lastDisplayed = getMessageCooldown(player,messageId);
+			long lastDisplayed = getMessageCooldown(player,messageId);
 
 			// get message repeat delay
-			int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
+			int messageRepeatDelay = messages.getInt("messages." + messageId + ".repeat-delay");
 
 			// if message has repeat delay value and was displayed to player more recently, do nothing and return
 			if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
@@ -157,7 +161,7 @@ public final class MessageManager {
 		}
 
 		// get message text from file
-		String message = messages.getConfig().getString("messages." + messageId + ".text");
+		String message = messages.getString("messages." + messageId.toString() + ".text");
 		
 		// get world name from worldManager
 		worldName = plugin.worldManager.getWorldName(worldName);
@@ -244,15 +248,15 @@ public final class MessageManager {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
 	}
 
-	
+
 	/**
 	 * Add entry to message cooldown map
 	 * @param player player to add to cooldown map
 	 * @param messageId message identifier to add to cooldown map
 	 */
-	private void putMessageCooldown(final Player player, final String messageId) {
+	private void putMessageCooldown(final Player player, final MessageId messageId) {
 
-		ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<>();
+		EnumMap<MessageId,Long> tempMap = new EnumMap<>(MessageId.class);
 		tempMap.put(messageId, System.currentTimeMillis());
 		messageCooldownMap.put(player.getUniqueId(), tempMap);
 	}
@@ -264,7 +268,7 @@ public final class MessageManager {
 	 * @param messageId message identifier for which to retrieve expire time
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(final Player player, final String messageId) {
+	private long getMessageCooldown(final Player player, final MessageId messageId) {
 
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
@@ -289,28 +293,26 @@ public final class MessageManager {
 //	}
 
 
+	/**
+	 * Reload messages
+	 */
 	public final void reload() {
 
-		// reload language file
-		languageManager.reload(messages);
+		// reload messages
+		this.messages = languageManager.loadMessages();
 	}
 
 
-	public final String getLanguage() {
-		return languageManager.getLanguage();
-	}
-
-	
 	public final String getToolName(final ClaimTool toolType) {
 		String configPrefix = "tool-name-";
-		return ChatColor.translateAlternateColorCodes('&',messages.getConfig()
+		return ChatColor.translateAlternateColorCodes('&',messages
 				.getString(configPrefix + toolType.toString().toLowerCase()));
 	}
 
 	
 	public final List<String> getToolLore(final ClaimTool toolType) {
 		String configPrefix = "tool-lore-";
-		List<String> lore = messages.getConfig().getStringList(configPrefix + toolType.toString().toLowerCase());
+		List<String> lore = messages.getStringList(configPrefix + toolType.toString().toLowerCase());
 		int lineNumber = 0;
 		while (lineNumber < lore.size()) {
 			lore.set(lineNumber, ChatColor.translateAlternateColorCodes('&',lore.get(lineNumber)));
@@ -320,7 +322,7 @@ public final class MessageManager {
 	}
 	
 	public final String getAdminName() {
-		return ChatColor.translateAlternateColorCodes('&',messages.getConfig().getString("admin-name"));
+		return ChatColor.translateAlternateColorCodes('&',messages.getString("admin-name"));
 	}
 
 }
